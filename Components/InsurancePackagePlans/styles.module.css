@@ -4,17 +4,15 @@
     sm:grid-cols-2
     sm:gap-6
     lg:grid-cols-3
-    lg:gap-8
+    lg:gap-8;
 }
-
-
 
 /* package card here */
 .insurance__package__card {
     @apply bg-theme-primary-2
     rounded-[1.5rem]
     pt-8 px-4 pb-[18px]
-    mb-6 sm:mb-0 w-full max-w-[32rem]
+    mb-6 sm:mb-0 w-full max-w-[27rem]
     sm:w-auto mx-auto sm:mx-0;
 }
 
@@ -58,7 +56,7 @@
     @apply bg-theme-gray-alpha
     flex
     justify-between
-    items-center
+    items-end
     p-4
     sm:p-6
     mb-8;
@@ -66,7 +64,8 @@
 
 .value {
     @apply block
-    text-xl
+    text-lg
+    xl:text-xl
     font-bold;
 }
 
@@ -76,7 +75,7 @@
 
 .key {
     @apply block
-    text-sm
+    text-[0.7rem]
     text-theme-white-alpha
     text-center;
 }
@@ -89,5 +88,5 @@
     font-bold
     text-lg
     rounded-full
-    p-3
+    p-3;
 }
