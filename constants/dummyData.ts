@@ -126,21 +126,6 @@ export const insurancePackages: IInsurancePackage[] = [
 
 export const stakingPools:IStakingPool[] = [
     {
-        poolId: "123",
-        stakeToken: "RANCE",
-        earnToken: "MUSD",
-        apr: 93.7,
-        totalStaked: 234500.2,
-        totalStakedUsd: 234500.2,
-        totalEarning: 134500.2,
-        totalEarningUsd: 134500.2,
-        staked: 1,
-        stakedUsd: 0,
-        contractUrl: "https://cronoscan.com/address/0x1234",
-        walletUnlockStatus: true,
-        stakeTokenPrice: 100,
-    },
-    {
         poolId: "124",
         stakeToken: "RANCE",
         earnToken: "RANCE",
@@ -153,6 +138,21 @@ export const stakingPools:IStakingPool[] = [
         stakedUsd: 0,
         contractUrl: "https://cronoscan.com/address/0x1234",
         walletUnlockStatus: false,
+        stakeTokenPrice: 100,
+    },
+    {
+        poolId: "123",
+        stakeToken: "RANCE",
+        earnToken: "MUSD",
+        apr: 93.7,
+        totalStaked: 234500.2,
+        totalStakedUsd: 234500.2,
+        totalEarning: 134500.2,
+        totalEarningUsd: 134500.2,
+        staked: 1,
+        stakedUsd: 0,
+        contractUrl: "https://cronoscan.com/address/0x1234",
+        walletUnlockStatus: true,
         stakeTokenPrice: 100,
     },
 ];

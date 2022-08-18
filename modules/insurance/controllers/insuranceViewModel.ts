@@ -1,5 +1,5 @@
 import { Web3Provider } from "@ethersproject/providers";
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ranceProtocol } from "../../../constants/addresses";
@@ -14,7 +14,8 @@ import { insure as insureUseCase } from "../usecases/insure";
 import { cancelInsurance as cancelInsuranceUseCase } from "../usecases/cancelInsurance";
 import { withdrawInsurance as withdrawInsuranceUseCase } from "../usecases/withdrawInsurance";
 import { watchEvent } from "../../../utils/events";
-import { userInfo } from "os";
+import useTransaction from "../../../hooks/useTransaction";
+import { getRPC } from "../../../utils/rpc";
 
 interface IProps {
     address: string | null | undefined;
@@ -28,6 +29,7 @@ const dappEnv: addressType = process.env
 export const useInsuranceViewModel = (props: IProps) => {
     const { address, provider } = props;
     const dispatch = useDispatch();
+    const { send } = useTransaction();
 
     const insuranceContract = RanceProtocol__factory.connect(
         ranceProtocol[dappEnv],
@@ -35,12 +37,24 @@ export const useInsuranceViewModel = (props: IProps) => {
     );
 
     const initializePackagePlans = useCallback(async (): Promise<void> => {
+        const rpc = await getRPC();
+        const provider = new ethers.providers.JsonRpcProvider(rpc);
+        const insuranceContract = RanceProtocol__factory.connect(
+            ranceProtocol[dappEnv],
+            provider
+        );
         await initializePackagePlansAction(insuranceContract)(dispatch);
-    }, [insuranceContract]);
+    }, []);
 
     const intializeUserPackages = useCallback(async (): Promise<void> => {
+        const rpc = await getRPC();
+        const provider = new ethers.providers.JsonRpcProvider(rpc);
+        const insuranceContract = RanceProtocol__factory.connect(
+            ranceProtocol[dappEnv],
+            provider
+        );
         await intializeUserPackagesAction(insuranceContract, address)(dispatch);
-    }, [insuranceContract, address]);
+    }, [address]);
 
     const removeUserPackage = useCallback(
         async (packageId: string) => {
@@ -74,6 +88,7 @@ export const useInsuranceViewModel = (props: IProps) => {
                 path,
                 insureCoin,
                 paymentToken,
+                send,
                 callbacks,
             });
         },
@@ -90,6 +105,7 @@ export const useInsuranceViewModel = (props: IProps) => {
             await cancelInsuranceUseCase({
                 contract: insuranceContract,
                 packageId,
+                send,
                 callbacks,
             });
         },
@@ -106,6 +122,7 @@ export const useInsuranceViewModel = (props: IProps) => {
             await withdrawInsuranceUseCase({
                 contract: insuranceContract,
                 packageId,
+                send,
                 callbacks,
             });
         },

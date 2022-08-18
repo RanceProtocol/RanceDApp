@@ -1,0 +1,68 @@
+.root {
+    @apply 
+    rounded-3xl my-8
+    w-full
+    h-[22rem]
+    lg:h-[18rem]
+    p-4
+    sm:p-6
+    md:p-8
+    block
+    lg:flex
+    lg:gap-6
+    animate-pulse
+    bg-theme-primary-2
+}
+
+.bg__color {
+    @apply bg-theme-gray-alpha
+}
+
+.earning__heading {
+    @apply w-[10rem]
+    sm:w-[15rem]
+    md:w-[10rem]
+    h-7
+    mb-4
+    rounded-md
+}
+
+.earning__text {
+    @apply w-[16rem]
+    sm:w-[22rem]
+    md:w-[16rem]
+    h-3
+    mb-1
+    rounded-md
+}
+
+.earning__text:last-of-type {
+    @apply w-[6rem]
+    sm:w-[8rem]
+    md:w-[6rem]
+    h-3
+    mb-1
+    rounded-md
+}
+
+.cards__section {
+    @apply flex gap-4
+    overflow-x-auto
+    mx-auto
+    mt-4
+    lg:mt-0
+}
+
+.earning__card {
+    @apply
+    rounded-[1rem]
+    p-8
+    pb-6
+    mb-6
+    sm:mb-0
+    w-full
+    min-w-[23rem]
+    max-w-[24rem]
+    h-[14rem]
+    md:min-w-[28rem]
+}

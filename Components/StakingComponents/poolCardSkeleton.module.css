@@ -1,0 +1,106 @@
+.root {
+    @apply bg-theme-primary-2
+    rounded-[1.5rem]
+    p-8
+    pb-6
+    mb-6
+    sm:mb-0
+    w-full
+    max-w-[24rem]
+    h-[26rem]
+    animate-pulse;
+}
+
+.bg__color {
+    @apply bg-theme-gray-alpha
+}
+
+.tokens__logos__container {
+    @apply mx-auto
+    flex
+    justify-center
+}
+
+.token__logo {
+    @apply w-12
+    h-12
+    rounded-full
+    relative;
+}
+
+.token__logo:nth-child(2) {
+    @apply
+    right-3
+}
+
+.token__logo:nth-child(1) {
+    @apply
+    left-3
+}
+
+.pool__tokens {
+    @apply w-1/2
+    h-6
+    mb-3
+    mt-6
+    mx-auto
+    rounded-md
+}
+
+.pool__description {
+    @apply w-4/6
+    h-3
+    mx-auto
+    rounded-sm
+}
+
+.apr__text {
+    @apply w-1/2
+    h-10
+    my-9
+    mx-auto
+    rounded-md
+}
+
+.pool__details {
+    @apply flex
+    justify-between
+    items-center
+    mb-4
+}
+
+.key__values {
+    @apply flex
+    flex-col
+}
+
+.key__values:last-of-type {
+    @apply items-end
+}
+
+.key {
+    @apply w-24
+    h-2
+    m-1
+    rounded
+}
+
+.value {
+    @apply w-16
+    h-3
+    rounded
+}
+
+.button {
+    @apply w-full
+    h-12
+    rounded-full p-4
+}
+
+.contract__link {
+    @apply w-32
+    h-4
+    rounded
+    mt-4
+    mx-auto
+}

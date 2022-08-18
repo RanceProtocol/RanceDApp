@@ -1,0 +1,53 @@
+.root {
+    @apply bg-theme-primary-2
+    rounded-[1rem]
+    p-8
+    pb-6
+    mb-6
+    sm:mb-0
+    w-full
+    min-w-[23rem]
+    max-w-[24rem]
+    md:min-w-[28rem]
+}
+
+.heading {
+    @apply flex justify-between
+    items-center
+    mb-6
+}
+
+.token__logo {
+    @apply w-14
+    h-14
+    relative;
+}
+
+.dollar__value {
+    @apply text-theme-gray-1
+}
+
+.token__section {
+    @apply mb-4
+}
+
+.token__name {
+    @apply text-xl
+    text-theme-white-alpha-4
+    block
+    mb-2
+}
+
+.token__amount {
+    @apply text-2xl font-extrabold
+    block
+}
+
+.withdraw__section {
+    @apply flex justify-end
+}
+
+.withdraw__button {
+    @apply ml-auto
+    text-theme-secondary-1
+}

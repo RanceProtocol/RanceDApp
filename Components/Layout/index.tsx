@@ -19,7 +19,8 @@ const Layout: FC<IProps> = ({ children }) => {
     const {accountModalOpened, walletModalOpened} = sharedStore
     const dispatch = useDispatch()
     const { connectWallet, disconnectWallet} = useWallet()
-
+    
+    
     return (
         <Fragment>
             <div className={styles.root}>

@@ -19,6 +19,7 @@ module.exports = {
             'theme-white-alpha': 'rgba(255, 255, 255, 0.49)',
             'theme-white-alpha-2': 'rgba(229, 229, 229, 0.1)',
             'theme-white-alpha-3': 'rgba(74, 74, 74, 0.07)',
+            'theme-white-alpha-4': 'rgba(255, 255, 255, 0.7)',
             'theme-red-1': '#CE0F0F',
             'theme-red-2': '#C8304D',
             'theme-red-alpha': 'rgba(206, 15, 15, 0.1)',
@@ -36,6 +37,10 @@ module.exports = {
             'theme-black': '#000000',
             'theme-black-alpha': 'rgba(0, 0, 0, 0.3)'
           },
+          backgroundImage: {
+            'earning-bg-desktop': "url('/earning-bg-desktop.png')",
+            'earning-bg-mobile': "url('/earning-bg-mobile.png')",
+          }
     },
     plugins: [],
 };

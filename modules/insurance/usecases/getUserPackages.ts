@@ -11,7 +11,8 @@ export const getUserPackages = async (contract: RanceProtocol, userAddress: stri
     if(!userAddress) return {userPackages: []} 
 
     try {
-        const packages:IRanceProtocol.PackageStructOutput[] = await contract.getAllUserPackages(userAddress)
+        const packagesLength = await contract.getUserPackagesLength(userAddress)
+        const packages:IRanceProtocol.PackageStructOutput[] = await contract.getAllUserPackages(userAddress, 0, packagesLength)
 
         if(packages.length === 0) {
             return {userPackages: []}
@@ -50,6 +51,7 @@ export const getUserPackages = async (contract: RanceProtocol, userAddress: stri
         return {userPackages: validUserPackages}
 
     } catch (error:any) {
+        console.log("getUserPackages: ", error);
         throw new Error(error);
     }
 

@@ -61,3 +61,41 @@
     justify-center
     
 }
+
+.earning__section {
+    @apply bg-earning-bg-mobile md:bg-earning-bg-desktop
+    bg-no-repeat bg-cover w-full
+    rounded-3xl my-8
+    p-4
+    sm:p-6
+    md:p-8
+    block
+    lg:flex
+    lg:gap-6
+}
+
+.earning__heading {
+    @apply text-2xl font-bold mb-4
+}
+
+.earning__text {
+    @apply text-base
+    text-theme-gray-2
+}
+
+.cards__section {
+    @apply flex gap-4
+    overflow-x-auto
+    mx-auto
+    mt-4
+    lg:mt-0
+}
+
+.message {
+    @apply text-center
+    sm:col-span-2
+    xl:col-span-3
+    mt-4
+    text-theme-white-alpha
+    text-sm
+}

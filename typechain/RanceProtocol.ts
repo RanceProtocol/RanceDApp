@@ -100,12 +100,16 @@ export interface RanceProtocolInterface extends utils.Interface {
     "addPaymentToken(string,address)": FunctionFragment;
     "cancel(bytes32)": FunctionFragment;
     "deactivatePackagePlan(bytes32)": FunctionFragment;
-    "getAllPackagePlans()": FunctionFragment;
-    "getAllUserPackages(address)": FunctionFragment;
+    "getAllPackagePlans(uint256,uint256)": FunctionFragment;
+    "getAllUserPackages(address,uint256,uint256)": FunctionFragment;
     "getInsureAmount(bytes32,uint256)": FunctionFragment;
-    "getInsureCoins()": FunctionFragment;
-    "getPaymentTokens()": FunctionFragment;
+    "getInsureCoins(uint256,uint256)": FunctionFragment;
+    "getInsureCoinsLength()": FunctionFragment;
+    "getPackagePlansLength()": FunctionFragment;
+    "getPaymentTokens(uint256,uint256)": FunctionFragment;
+    "getPaymentTokensLength()": FunctionFragment;
     "getTotalInsuranceLocked(address)": FunctionFragment;
+    "getUserPackagesLength(address)": FunctionFragment;
     "initialize(address,address,address,address)": FunctionFragment;
     "insure(bytes32,uint256,address[],string,string)": FunctionFragment;
     "insureCoinAdded(address)": FunctionFragment;
@@ -146,8 +150,12 @@ export interface RanceProtocolInterface extends utils.Interface {
       | "getAllUserPackages"
       | "getInsureAmount"
       | "getInsureCoins"
+      | "getInsureCoinsLength"
+      | "getPackagePlansLength"
       | "getPaymentTokens"
+      | "getPaymentTokensLength"
       | "getTotalInsuranceLocked"
+      | "getUserPackagesLength"
       | "initialize"
       | "insure"
       | "insureCoinAdded"
@@ -203,11 +211,15 @@ export interface RanceProtocolInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getAllPackagePlans",
-    values?: undefined
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getAllUserPackages",
-    values: [PromiseOrValue<string>]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "getInsureAmount",
@@ -215,14 +227,30 @@ export interface RanceProtocolInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getInsureCoins",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getInsureCoinsLength",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPackagePlansLength",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getPaymentTokens",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPaymentTokensLength",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getTotalInsuranceLocked",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getUserPackagesLength",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -370,11 +398,27 @@ export interface RanceProtocolInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getInsureCoinsLength",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPackagePlansLength",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getPaymentTokens",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getPaymentTokensLength",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getTotalInsuranceLocked",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getUserPackagesLength",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -722,11 +766,15 @@ export interface RanceProtocol extends BaseContract {
     ): Promise<ContractTransaction>;
 
     getAllPackagePlans(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[RanceProtocol.PackagePlanStructOutput[]]>;
 
     getAllUserPackages(
       _user: PromiseOrValue<string>,
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[RanceProtocol.PackageStructOutput[]]>;
 
@@ -736,12 +784,31 @@ export interface RanceProtocol extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    getInsureCoins(overrides?: CallOverrides): Promise<[string[]]>;
+    getInsureCoins(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string[]]>;
 
-    getPaymentTokens(overrides?: CallOverrides): Promise<[string[]]>;
+    getInsureCoinsLength(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getPackagePlansLength(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getPaymentTokens(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string[]]>;
+
+    getPaymentTokensLength(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getTotalInsuranceLocked(
       _token: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getUserPackagesLength(
+      _user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -938,11 +1005,15 @@ export interface RanceProtocol extends BaseContract {
   ): Promise<ContractTransaction>;
 
   getAllPackagePlans(
+    cursor: PromiseOrValue<BigNumberish>,
+    length: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<RanceProtocol.PackagePlanStructOutput[]>;
 
   getAllUserPackages(
     _user: PromiseOrValue<string>,
+    cursor: PromiseOrValue<BigNumberish>,
+    length: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<RanceProtocol.PackageStructOutput[]>;
 
@@ -952,12 +1023,31 @@ export interface RanceProtocol extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  getInsureCoins(overrides?: CallOverrides): Promise<string[]>;
+  getInsureCoins(
+    cursor: PromiseOrValue<BigNumberish>,
+    length: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string[]>;
 
-  getPaymentTokens(overrides?: CallOverrides): Promise<string[]>;
+  getInsureCoinsLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getPackagePlansLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getPaymentTokens(
+    cursor: PromiseOrValue<BigNumberish>,
+    length: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string[]>;
+
+  getPaymentTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
 
   getTotalInsuranceLocked(
     _token: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getUserPackagesLength(
+    _user: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -1154,11 +1244,15 @@ export interface RanceProtocol extends BaseContract {
     ): Promise<void>;
 
     getAllPackagePlans(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<RanceProtocol.PackagePlanStructOutput[]>;
 
     getAllUserPackages(
       _user: PromiseOrValue<string>,
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<RanceProtocol.PackageStructOutput[]>;
 
@@ -1168,12 +1262,31 @@ export interface RanceProtocol extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getInsureCoins(overrides?: CallOverrides): Promise<string[]>;
+    getInsureCoins(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string[]>;
 
-    getPaymentTokens(overrides?: CallOverrides): Promise<string[]>;
+    getInsureCoinsLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getPackagePlansLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getPaymentTokens(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string[]>;
+
+    getPaymentTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
 
     getTotalInsuranceLocked(
       _token: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getUserPackagesLength(
+      _user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1491,10 +1604,16 @@ export interface RanceProtocol extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    getAllPackagePlans(overrides?: CallOverrides): Promise<BigNumber>;
+    getAllPackagePlans(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getAllUserPackages(
       _user: PromiseOrValue<string>,
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1504,12 +1623,31 @@ export interface RanceProtocol extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getInsureCoins(overrides?: CallOverrides): Promise<BigNumber>;
+    getInsureCoins(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getPaymentTokens(overrides?: CallOverrides): Promise<BigNumber>;
+    getInsureCoinsLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getPackagePlansLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getPaymentTokens(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPaymentTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
 
     getTotalInsuranceLocked(
       _token: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getUserPackagesLength(
+      _user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1673,11 +1811,15 @@ export interface RanceProtocol extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getAllPackagePlans(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getAllUserPackages(
       _user: PromiseOrValue<string>,
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1687,12 +1829,37 @@ export interface RanceProtocol extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getInsureCoins(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getInsureCoins(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
-    getPaymentTokens(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getInsureCoinsLength(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPackagePlansLength(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPaymentTokens(
+      cursor: PromiseOrValue<BigNumberish>,
+      length: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPaymentTokensLength(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getTotalInsuranceLocked(
       _token: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getUserPackagesLength(
+      _user: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

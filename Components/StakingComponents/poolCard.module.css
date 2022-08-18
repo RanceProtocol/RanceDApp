@@ -63,29 +63,41 @@
 .info__icon {
     @apply text-base
     text-theme-secondary-1
+    cursor-pointer
     opacity-60;
 }
 
-.pool__details {
+.pool__details, .user__details {
     @apply flex
     justify-between
     items-center
-    mb-8
+    mb-4
 }
 .key__values {
     @apply flex
     flex-col
 }
 
+.key__values:last-of-type {
+    @apply items-end
+}
+
+
 .key {
     @apply text-xs
-    sm:text-sm
     text-theme-gray-1
+}
+
+.pool__details .value {
+    @apply text-theme-gray-2
 }
 
 .value {
     @apply text-sm
-    sm:text-lg
+}
+
+.dollar__value {
+    @apply text-theme-gray-4
 }
 
 .btn {
@@ -113,7 +125,7 @@
     border-theme-secondary-1
     bg-theme-secondary-2
     hover:bg-theme-secondary-1
-    text-theme-black
+    text-theme-white
 }
 
 .btn__solid2 {
@@ -142,4 +154,9 @@
 
 .contract__link:hover {
     @apply text-theme-white
+}
+
+.tooltip {
+    @apply w-[12rem]
+    text-xs;
 }

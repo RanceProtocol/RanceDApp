@@ -26,8 +26,6 @@ const InsurancePackagePlanCard: FC<IProp> = (props) => {
     const { account } = useWeb3React();
 
     const dispatch = useDispatch();
-
-    console.log(insurableCoins);
     
 
     return (

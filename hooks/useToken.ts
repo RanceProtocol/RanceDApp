@@ -9,7 +9,7 @@ import useTransaction from "./useTransaction";
 const useToken = (address: string) => {
     const { library, active, account } = useWeb3React();
     const [balance, setBalance] = useState(BigNumber.from(0));
-    const [allowances, setAllowance] = useState({});
+    const [allowances, setAllowance] = useState<{[key:string]:BigNumber}>({});
     const [symbol, setSymbol] = useState("");
     const [decimals, setDecimals] = useState(18);
 

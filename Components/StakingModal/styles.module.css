@@ -112,3 +112,17 @@
     rounded-full
     p-3
 }
+
+.action__button:disabled {
+    @apply bg-theme-secondary-alpha-2
+    text-theme-white-alpha
+    cursor-not-allowed
+}
+
+.message {
+    @apply block
+    text-sm
+    py-2
+    text-center
+    text-theme-gray-6
+}
