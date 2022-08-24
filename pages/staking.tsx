@@ -1,9 +1,10 @@
+// NOTE: to make staking accessible, remove the 'Coming soon...' and uncomment the rest of the code
+
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/staking.module.css";
 import PoolCard from "../Components/StakingComponents/PoolCard";
-// import type { IStakingPool } from "../constants/dummyData";
 import { useStakingViewModel } from "../modules/staking/controllers/stakingViewModel";
 import { useWeb3React } from "@web3-react/core";
 import { useEffect } from "react";
@@ -16,27 +17,27 @@ import useToken from "../hooks/useToken";
 import { tokens } from "../constants/addresses";
 
 const Staking: NextPage = () => {
-    const { account, library } = useWeb3React();
+    // const { account, library } = useWeb3React();
 
-    const { initializeStakingPools, stake, harvest, unstake } =
-        useStakingViewModel({
-            address: account,
-            provider: library,
-        });
+    // const { initializeStakingPools, stake, harvest, unstake } =
+    //     useStakingViewModel({
+    //         address: account,
+    //         provider: library,
+    //     });
 
-    const { loadingPools, pools, loadingUserEarnings } = stakingState();
+    // const { loadingPools, pools, loadingUserEarnings } = stakingState();
 
-    useEffect(() => {
-        (async () => {
-            initializeStakingPools();
-        })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [account]);
+    // useEffect(() => {
+    //     (async () => {
+    //         initializeStakingPools();
+    //     })();
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [account]);
 
-    const RANCE = useToken(
-        tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
-            .RANCE
-    );
+    // const RANCE = useToken(
+    //     tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
+    //         .RANCE
+    // );
 
     return (
         <div className={styles.container}>
@@ -64,7 +65,7 @@ const Staking: NextPage = () => {
                     </div>
                 </div>
 
-                <div className={styles.staking__card__wrapper}>
+                {/* <div className={styles.staking__card__wrapper}>
                     {pools.length !== 0 ? (
                         pools.map((pool: IStakingPool) => (
                             <PoolCard
@@ -128,7 +129,10 @@ const Staking: NextPage = () => {
                                 </div>
                             </div>
                         )
-                    ))}
+                    ))} */}
+                <div className={styles.staking__card__wrapper}>
+                    <p className={styles.message}>Coming soon...</p>
+                </div>
             </main>
         </div>
     );

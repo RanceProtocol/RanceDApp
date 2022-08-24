@@ -32,22 +32,27 @@ export interface IInsurancePackage {
 }
 
 export interface IStakingPool {
-    poolId: string
-    stakeToken: string,
-    earnToken: string
-    apr: number
-    totalStaked: number
-    totalStakedUsd: number
-    totalEarning: number
-    totalEarningUsd: number
-    staked: number,
-    stakedUsd: number,
-    contractUrl: string,
-    walletUnlockStatus: boolean,
-    stakeTokenPrice: number,
+    poolId: string;
+    stakeToken: string;
+    earnToken: string;
+    apr: number;
+    totalStaked: number;
+    totalStakedUsd: number;
+    totalEarning: number;
+    totalEarningUsd: number;
+    staked: number;
+    stakedUsd: number;
+    contractUrl: string;
+    walletUnlockStatus: boolean;
+    stakeTokenPrice: number;
 }
 
-export const insurableCoins: IinsurableCoins[] = ["WBTC", "WETH", "WCRO", "MMF"];
+export const insurableCoins: IinsurableCoins[] = [
+    "WBTC",
+    "WETH",
+    "WCRO",
+    "MMF",
+];
 
 export const insurancePackagePlans: IinsurancePackagePlan[] = [
     {
@@ -66,7 +71,7 @@ export const insurancePackagePlans: IinsurancePackagePlan[] = [
         timeUnit: "YR",
         timeUnitFull: "year",
         insuranceFee: 50,
-        uninsureFee:utils.parseEther("100"),
+        uninsureFee: utils.parseEther("100"),
     },
     {
         packageType: PackageEnum.PLATINUM,
@@ -124,7 +129,7 @@ export const insurancePackages: IInsurancePackage[] = [
     },
 ];
 
-export const stakingPools:IStakingPool[] = [
+export const stakingPools: IStakingPool[] = [
     {
         poolId: "124",
         stakeToken: "RANCE",
@@ -181,6 +186,11 @@ export const addressToCoinDetails: {
             symbol: "mmf",
             name: "MMFinance",
         },
+        "0x7b8aD6d7560FAcd1959cfb4b4163D7d297c4bFc0": {
+            id: "cro-predict",
+            symbol: "crp",
+            name: "CRO Predict",
+        },
     },
     staging: {
         "0x378520d445d3379497f991f7fef7E613014c20b2": {
@@ -203,5 +213,5 @@ export const addressToCoinDetails: {
         //     symbol: "mmf",
         //     name: "MMFinance",
         // },
-    }
+    },
 };

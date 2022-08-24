@@ -34,7 +34,7 @@
 .insurable__coins__container {
     @apply flex
     relative
-    left-8;
+    left-12;
 }
 
 .coin_logo__wrapper {
@@ -50,6 +50,9 @@
 }
 .coin_logo__wrapper:nth-child(4) {
     @apply right-9;
+}
+.coin_logo__wrapper:nth-child(5) {
+    @apply right-12;
 }
 
 .package__details {
