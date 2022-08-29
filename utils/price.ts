@@ -4,57 +4,36 @@ import { AUTOSHARK_ADDRESSES, tokens } from "../constants/addresses";
 import { AutoSharkRouter__factory, Erc20, Erc20__factory } from "../typechain";
 import { getCurrentTimestamp, getDateFromTimstamp } from "./time";
 
-export const getPriceChangeSinceInsured = async (
+export const getCoinPriceDataSinceInsured = async (
     coin_id: string,
     insuredStartTimestamp: number
-): Promise<string> => {
+): Promise<{ priceChange: string; sparklineData: number[] }> => {
     const currentTimestamp = await getCurrentTimestamp();
-    if (!currentTimestamp) return "0%";
-    const currentDate = getDateFromTimstamp(currentTimestamp);
-    const insuredDate = getDateFromTimstamp(insuredStartTimestamp);
-    const res = await Promise.all([
-        axios.get(
-            `https://api.coingecko.com/api/v3/coins/${coin_id}/history?date=${insuredDate}&localization=false`
-        ),
-        axios.get(
-            `https://api.coingecko.com/api/v3/coins/${coin_id}/history?date=${currentDate}&localization=false`
-        ),
-    ]);
-    if (
-        !res[0].data?.market_data?.current_price?.usd ||
-        !res[1].data?.market_data?.current_price?.usd
-    )
-        return "0%";
-    const difference =
-        res[1].data.market_data.current_price.usd -
-        res[0].data.market_data.current_price.usd;
-    const percentageChange =
-        (difference / res[0].data.market_data.current_price.usd) * 100;
-
-    return Math.max(0, percentageChange) === 0
-        ? `${percentageChange.toFixed(2)}%`
-        : `+${percentageChange.toFixed(2)}%`;
-};
-
-export const getCoinChartData = async (
-    coin_id: string,
-    insured_timestamp: number
-): Promise<number[]> => {
-    const currentTimestamp = await getCurrentTimestamp();
-    if (!currentTimestamp) return [];
-    const timestampDifference = currentTimestamp - insured_timestamp;
-    const daysPast = Math.floor(timestampDifference / 86400);
-    const response = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${coin_id}/market_chart?vs_currency=usd&days=${Math.max(
-            1,
-            daysPast
-        )}`
+    if (!currentTimestamp)
+        return { priceChange: "0%", sparklineData: new Array(2).fill(0) };
+    const res = await axios.get(
+        `https://api.coingecko.com/api/v3/coins/${coin_id}/market_chart/range?vs_currency=usd&from=${insuredStartTimestamp}&to=${currentTimestamp}`
     );
-    if (response.status !== 200) return [];
-    const parsedData = response.data.prices.map(
+
+    if (!res?.data?.prices || res?.data?.prices.length < 2) {
+        console.log("no price change data data yet");
+        return { priceChange: "0%", sparklineData: new Array(2).fill(0) };
+    }
+
+    const difference =
+        res.data.prices[res.data.prices.length - 1][1] - res.data.prices[0][1];
+    const percentageChange = (difference / res.data.prices[0][1]) * 100;
+
+    const priceChange =
+        Math.max(0, percentageChange) === 0
+            ? `${percentageChange.toFixed(2)}%`
+            : `+${percentageChange.toFixed(2)}%`;
+
+    const sparklineData = res.data.prices.map(
         (priceArr: number[]) => priceArr[1]
     );
-    return parsedData;
+
+    return { priceChange, sparklineData };
 };
 
 const AutosharkRouter = (provider: ethers.providers.Provider | ethers.Signer) =>
@@ -86,9 +65,9 @@ export const getRANCEPrice = async (
     ];
     try {
         const price = await getPriceWithAutosharkRouter(path, provider);
-        return price
+        return price;
     } catch (error) {
         console.error(error);
-        return 1
+        return 1;
     }
 };

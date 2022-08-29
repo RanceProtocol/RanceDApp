@@ -3,10 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import styles from "./styles.module.css";
 import { Sparklines, SparklinesLine } from "react-sparklines";
-import {
-    getCoinChartData,
-    getPriceChangeSinceInsured,
-} from "../../utils/price";
+import { getCoinPriceDataSinceInsured } from "../../utils/price";
 import clsx from "clsx";
 import { addressToCoinDetails } from "../../constants/dummyData";
 import {
@@ -17,6 +14,7 @@ import { utils } from "ethers";
 import { useCountdown } from "../../hooks/useCountdown";
 import { padZero } from "../../utils/helpers";
 import { IInsurancePackage } from "../../modules/insurance/domain/entities";
+import useLazyToken from "../../hooks/useLazyToken";
 
 interface IProp extends IInsurancePackage {
     clickAction: (id: string) => void;
@@ -28,7 +26,9 @@ const MyPackageCard: FC<IProp> = (props) => {
         duration,
         endTimestamp,
         initialDeposit,
+        paymentToken,
         insureCoin,
+        insureOutput,
         packageId,
         packagePlanName,
         startTimestamp,
@@ -38,6 +38,35 @@ const MyPackageCard: FC<IProp> = (props) => {
     const [priceChange, setPriceChange] = useState<string>("0%");
 
     const [currentTimeStamp, setCurrentTimeStamp] = useState(0);
+    const [paymentTokenDecimals, setPaymetTokenDecimals] = useState<
+        number | null
+    >(null);
+    const [insureCoinDecimals, setInsureCoinDecimals] = useState<number | null>(
+        null
+    );
+
+    const { getDecimal } = useLazyToken();
+    useEffect(() => {
+        (async () => {
+            try {
+                const decimals = await Promise.all([
+                    await getDecimal(paymentToken),
+                    await getDecimal(insureCoin),
+                ]);
+                setPaymetTokenDecimals(decimals[0]);
+                setInsureCoinDecimals(decimals[1]);
+            } catch (error) {
+                // const toastBody = CustomToast({
+                //     message:
+                //         "An error occured, Please reload the page",
+                //     status: STATUS.ERROR,
+                //     type: TYPE.ERROR,
+                // });
+                // toast(toastBody);
+            }
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         (async () => {
@@ -49,17 +78,16 @@ const MyPackageCard: FC<IProp> = (props) => {
 
     useEffect(() => {
         (async () => {
-            const chartData = await getCoinChartData(
-                addressToCoinDetails[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails][insureCoin].id,
+            const coinPriceData = await getCoinPriceDataSinceInsured(
+                addressToCoinDetails[
+                    process.env
+                        .NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails
+                ][insureCoin].id,
                 startTimestamp
             );
-            setChartData(chartData);
-            const priceChange = await getPriceChangeSinceInsured(
-                addressToCoinDetails[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails][insureCoin].id,
-                startTimestamp
-            );
-            setPriceChange(priceChange);
-        })()
+            setChartData(coinPriceData.sparklineData);
+            setPriceChange(coinPriceData.priceChange);
+        })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -116,6 +144,22 @@ const MyPackageCard: FC<IProp> = (props) => {
                         >{`${duration} ${timeUnitFull}`}</span>
                         <span className={styles.key}>Duration</span>
                     </div>
+                    <div className={styles.key__value}>
+                        <span className={styles.value}>
+                            {insureCoinDecimals
+                                ? `${Number(
+                                      utils.formatUnits(
+                                          insureOutput,
+                                          insureCoinDecimals
+                                      )
+                                  ).toFixed(2)} ${addressToCoinDetails[
+                                      process.env
+                                          .NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails
+                                  ][insureCoin].symbol.toUpperCase()}`
+                                : "..."}
+                        </span>
+                        <span className={styles.key}>To return</span>
+                    </div>
                 </div>
                 <div className={styles.section__two}>
                     <div className={styles.coin__details}>
@@ -123,18 +167,27 @@ const MyPackageCard: FC<IProp> = (props) => {
                             <div className={styles.icon__nd__name}>
                                 <div className={styles.coin_logo__wrapper}>
                                     <Image
-                                        src={`/token-icons/${addressToCoinDetails[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails][
+                                        src={`/token-icons/${addressToCoinDetails[
+                                            process.env
+                                                .NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails
+                                        ][
                                             insureCoin
                                         ].symbol.toUpperCase()}.png`}
-                                        alt={`${addressToCoinDetails[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails][insureCoin].id} logo`}
+                                        alt={`${
+                                            addressToCoinDetails[
+                                                process.env
+                                                    .NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails
+                                            ][insureCoin].id
+                                        } logo`}
                                         layout="fill"
                                     />
                                 </div>
                                 <span
                                     className={styles.coin__name}
-                                >{`${addressToCoinDetails[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails][
-                                    insureCoin
-                                ].symbol.toUpperCase()}`}</span>
+                                >{`${addressToCoinDetails[
+                                    process.env
+                                        .NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails
+                                ][insureCoin].symbol.toUpperCase()}`}</span>
                             </div>
                             <div className={styles.price__change}>
                                 <span
@@ -157,50 +210,61 @@ const MyPackageCard: FC<IProp> = (props) => {
                         </Sparklines>
                     </div>
 
-
                     {currentTimeStamp > (endTimestamp as number) && (
-                    <p className={styles.expired__in__text}>
-                    Access to this package ends in
-                </p>
-                )}
-                {(endTimestamp as number) >= currentTimeStamp && (
-                    <p className={styles.expired__in__text}>
-                    This package expires in
-                </p>
-                )}
+                        <p className={styles.expired__in__text}>
+                            Access to this package ends in
+                        </p>
+                    )}
+                    {(endTimestamp as number) >= currentTimeStamp && (
+                        <p className={styles.expired__in__text}>
+                            This package expires in
+                        </p>
+                    )}
 
                     <div className={styles.countdown__nd__button}>
                         <div className={styles.countdown__container}>
                             <span className={styles.countdown__group}>
-                                <span className={styles.countdown__value}>{countdown?.weeks
+                                <span className={styles.countdown__value}>
+                                    {countdown?.weeks
                                         ? padZero(countdown?.weeks)
                                         : "00"}
                                 </span>
-                                <span className={styles.countdown__label}>WEEKS</span>
+                                <span className={styles.countdown__label}>
+                                    WEEKS
+                                </span>
                             </span>
 
                             <span className={styles.countdown__group}>
-                                <span className={styles.countdown__value}>{countdown?.days
+                                <span className={styles.countdown__value}>
+                                    {countdown?.days
                                         ? padZero(countdown?.days)
                                         : "00"}
                                 </span>
-                                <span className={styles.countdown__label}>DAYS</span>
+                                <span className={styles.countdown__label}>
+                                    DAYS
+                                </span>
                             </span>
 
                             <span className={styles.countdown__group}>
-                                <span className={styles.countdown__value}>{countdown?.hours
+                                <span className={styles.countdown__value}>
+                                    {countdown?.hours
                                         ? padZero(countdown?.hours)
                                         : "00"}
                                 </span>
-                                <span className={styles.countdown__label}>HOURS</span>
+                                <span className={styles.countdown__label}>
+                                    HOURS
+                                </span>
                             </span>
 
                             <span className={styles.countdown__group}>
-                                <span className={styles.countdown__value}>{countdown?.minutes
+                                <span className={styles.countdown__value}>
+                                    {countdown?.minutes
                                         ? padZero(countdown?.minutes)
                                         : "00"}
                                 </span>
-                                <span className={styles.countdown__label}>MINS</span>
+                                <span className={styles.countdown__label}>
+                                    MINS
+                                </span>
                             </span>
                         </div>
 

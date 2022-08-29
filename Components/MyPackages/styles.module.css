@@ -1,10 +1,10 @@
 .root {
     @apply my-8
     grid grid-cols-1
-    sm:grid-cols-2
-    sm:gap-6
+    md:grid-cols-2
     xl:grid-cols-3
-    lg:gap-8
+    sm:gap-6
+    lg:gap-8;
 }
 
 /* my package card here */
@@ -16,8 +16,8 @@
     pb-[2.2rem]
     mb-6 sm:mb-0
     w-full
-    max-w-[38rem]
-    min-w-[19rem]
+    max-w-[30rem]
+    min-w-[20rem]
     sm:w-auto
     mx-auto
     sm:mx-0;
@@ -30,16 +30,16 @@
     items-center
     p-2
     px-4
-    rounded-lg
+    rounded-lg;
 }
 
 .balance {
-    @apply text-xs
+    @apply text-xs;
 }
 
 .amount {
     @apply text-sm
-    font-bold
+    font-bold;
 }
 
 .status {
@@ -47,43 +47,43 @@
     px-4
     py-1
     rounded-lg
-    text-xs
+    text-xs;
 }
 
 .status__active {
-    @apply bg-theme-green
+    @apply bg-theme-green;
 }
 
 .status__expired {
-    @apply bg-theme-gray-1
+    @apply bg-theme-gray-1;
 }
 
 .status__icon {
     @apply inline
     align-middle
-    text-xl
+    text-xl;
 }
 
 .name__section {
     @apply mt-8
     flex
     justify-between
-    items-center
+    items-center;
 }
 
 .body {
     @apply relative
     left-2
-    sm:left-4
+    sm:left-2;
 }
 
 .name {
     @apply font-extrabold
-    text-xl
+    text-xl;
 }
 
 .dot {
-    @apply mr-10
+    @apply mr-10;
 }
 
 .package__details {
@@ -91,26 +91,26 @@
     justify-start
     items-center
     gap-6
-    sm:gap-8
+    /* sm:gap-8 */
     mt-6
     border-b-[0.2px]
     border-theme-gray-1
-    pb-4
+    pb-4;
 }
 
 .key__value {
     @apply flex
     flex-col
-    text-xs
+    text-[.6rem];
 }
 
 .key {
-    @apply text-theme-gray-1
+    @apply text-theme-gray-1;
 }
 
 .section__two {
     @apply w-full
-    pr-4
+    pr-4;
 }
 
 .coin__details {
@@ -118,71 +118,70 @@
     mt-6
     p-4
     pb-0
-    rounded-xl
+    rounded-xl;
 }
 
 .coin {
     @apply flex
     justify-between
-    items-center
+    items-center;
 }
 
 .icon__nd__name {
     @apply flex
     items-center
-    text-xs
+    text-xs;
 }
 
 .price__change {
     @apply flex
     flex-col
     items-end
-    text-xs
+    text-xs;
 }
 
 .coin_logo__wrapper {
     @apply w-6 h-6
     relative
-    mr-2
+    mr-2;
 }
 
 .increase__value {
-    @apply text-theme-green
+    @apply text-theme-green;
 }
 
 .decrease__value {
-    @apply text-theme-red-1
+    @apply text-theme-red-1;
 }
 
 .increase__key {
-    @apply
-    text-[.5rem]
-    text-theme-gray-1
+    @apply text-[.5rem]
+    text-theme-gray-1;
 }
 
 .expired__in__text {
     @apply my-6
     text-theme-gray-1
-    text-xs
+    text-xs;
 }
 
 .countdown__nd__button {
     @apply flex
     justify-between
-    items-end
+    items-end;
 }
 
 .countdown__container {
     @apply flex
     gap-2
-    sm:gap-4
+    sm:gap-4;
 }
 
 .countdown__group {
     @apply flex
     flex-col
     items-center
-    relative
+    relative;
 }
 
 .countdown__group:not(.countdown__group:last-of-type):after {
@@ -192,21 +191,19 @@
     text-base
     sm:text-xl
     font-extrabold
-    /* -top-1 */
+    /* -top-1 */;
 }
 
 .countdown__value {
-    @apply
-    text-base
+    @apply text-base
     sm:text-xl
-    font-extrabold
+    font-extrabold;
 }
 
 .countdown__label {
-    @apply
-    mt-2
+    @apply mt-2
     text-[.5rem]
-    text-theme-gray-1
+    text-theme-gray-1;
 }
 
 .cancel__button {
@@ -217,7 +214,7 @@
     sm:px-3
     py-2
     rounded-md
-    whitespace-nowrap
+    whitespace-nowrap;
 }
 
 .withdraw__button {
@@ -228,7 +225,7 @@
     sm:px-3
     py-2
     rounded-md
-    whitespace-nowrap
+    whitespace-nowrap;
 }
 
 .message {
@@ -237,5 +234,5 @@
     xl:col-span-3
     mt-4
     text-theme-white-alpha
-    text-sm
+    text-sm;
 }

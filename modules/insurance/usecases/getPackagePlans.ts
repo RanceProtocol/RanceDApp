@@ -23,6 +23,8 @@ export const getPackagePlans = async (
             return { ...item, ...getDurationData(item.periodInSeconds) };
         });
 
+        const r = await contract.RANCE();
+
         const insureCoinLength = await contract.getInsureCoinsLength();
         const insurableCoinsNames: string[] = await contract.getInsureCoins(
             0,

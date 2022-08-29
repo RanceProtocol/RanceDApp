@@ -12,7 +12,7 @@
     rounded-xl
     md:rounded-2xl
     max-h-[100vh]
-    overflow-x-auto
+    overflow-x-auto;
 }
 .header {
     @apply flex
@@ -29,7 +29,7 @@
 
 .close__btn {
     @apply w-8
-    h-8
+    h-8;
 }
 
 .close__icon__wrapper {
@@ -41,7 +41,7 @@
 .tokens__logos__container {
     @apply mx-auto
     flex
-    justify-center
+    justify-center;
 }
 
 .token__logo {
@@ -51,13 +51,11 @@
 }
 
 .token__logo:nth-child(2) {
-    @apply
-    right-3
+    @apply right-3;
 }
 
 .token__logo:nth-child(1) {
-    @apply
-    left-3
+    @apply left-3;
 }
 
 .pool__tokens {
@@ -68,22 +66,26 @@
 }
 
 .input__group {
-    @apply my-10
+    @apply my-10;
 }
 
 .label__and__balance {
     @apply flex
     justify-between
     text-[.6rem]
-    sm:text-xs
+    sm:text-xs;
 }
 
 .label {
-    @apply font-extrabold
+    @apply font-extrabold;
 }
 
 .balance {
-    @apply text-theme-green
+    @apply text-theme-green;
+}
+
+.input__container {
+    @apply relative;
 }
 
 .amount__input {
@@ -98,6 +100,25 @@
     text-sm;
 }
 
+.max__btn {
+    @apply absolute
+    top-[45%]
+    right-[5%]
+    text-[0.6rem]
+    font-black
+    bg-theme-green
+    text-theme-white-alpha-4
+    border
+    border-theme-white-alpha-4
+    px-1
+    rounded-sm
+    transition-all;
+}
+
+.max__btn:hover {
+    @apply scale-[1.1];
+}
+
 .amount__input::placeholder {
     @apply text-theme-gray-4;
 }
@@ -110,13 +131,13 @@
     font-bold
     text-base
     rounded-full
-    p-3
+    p-3;
 }
 
 .action__button:disabled {
     @apply bg-theme-secondary-alpha-2
     text-theme-white-alpha
-    cursor-not-allowed
+    cursor-not-allowed;
 }
 
 .message {
@@ -124,5 +145,5 @@
     text-sm
     py-2
     text-center
-    text-theme-gray-6
+    text-theme-gray-6;
 }

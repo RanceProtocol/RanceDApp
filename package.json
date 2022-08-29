@@ -30,6 +30,7 @@
     "react-sparklines": "^1.7.0",
     "react-toastify": "^9.0.5",
     "react-tooltip": "^4.2.21",
+    "simple-uniswap-sdk": "^3.7.0",
     "web3": "^1.7.4"
   },
   "devDependencies": {

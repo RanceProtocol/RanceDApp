@@ -19,7 +19,9 @@ import CustomToast, { STATUS, TYPE } from "../CustomToast";
 import { toast } from "react-toastify";
 import { useInsuranceViewModel } from "../../modules/insurance/controllers/insuranceViewModel";
 import { useWeb3React } from "@web3-react/core";
-import { pathObj } from "../../constants/path";
+import { getDefaultProvider } from "../../wallet/utils";
+import Loading from "../SharedComponent/Loading";
+import { findBestRoute } from "../../utils/path";
 
 type addressType = keyof typeof ranceProtocol;
 
@@ -60,6 +62,16 @@ const PackagePurchaseModal: FC<IProps> = ({
         paymentToken: null,
     });
 
+    const [tradeDetails, setTradeDetails] = useState<{
+        processing: boolean;
+        path: string[] | null;
+        expectedOutput: string | null;
+    }>({
+        processing: false,
+        path: null,
+        expectedOutput: null,
+    });
+
     const [paymentTokenOptions, setPaymentTokenOptions] = useState<
         | OptionsOrGroups<
               { value: string; label: string },
@@ -88,6 +100,41 @@ const PackagePurchaseModal: FC<IProps> = ({
         // disallow clossing modal when transaction is ongoing
         !sendingTx && onClose();
     };
+
+    useEffect(() => {
+        if (!formDetails.coin || !(Number(formDetails.amount) > 0)) {
+            // reset the state
+            return setTradeDetails({
+                processing: false,
+                path: null,
+                expectedOutput: null,
+            });
+        }
+
+        (async () => {
+            setTradeDetails((prev) => ({ ...prev, processing: true }));
+            try {
+                const trade = await findBestRoute({
+                    fromTokenContractAddress: paymentToken!.value,
+                    toTokenContractAddress: insurableCoins[coin as string],
+                    amount: formDetails.amount,
+                    provider: getDefaultProvider(),
+                });
+                console.log("trade: ", trade);
+
+                setTradeDetails({ processing: false, ...trade });
+            } catch (error) {
+                const toastBody = CustomToast({
+                    message:
+                        "Something went wrong while fetching trade details!",
+                    status: STATUS.ERROR,
+                    type: TYPE.ERROR,
+                });
+                return toast(toastBody);
+            }
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [formDetails.coin, formDetails.amount, formDetails.paymentToken]);
 
     useEffect(() => {
         if (!insurableCoins || formDetails.coin) return;
@@ -276,7 +323,8 @@ const PackagePurchaseModal: FC<IProps> = ({
     };
 
     const handleInsure = async () => {
-        if (formDetails.total === "0" || !paymentToken) return;
+        if (formDetails.total === "0" || !paymentToken || !tradeDetails.path)
+            return;
 
         let pendingToastId: number | string = "";
         const callbacks = {
@@ -329,13 +377,6 @@ const PackagePurchaseModal: FC<IProps> = ({
                 setSendingTx(false);
             },
         };
-        const paths =
-            pathObj[
-                process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof pathObj
-            ];
-        const path = Object.values(
-            paths[`${paymentToken.label}-${coin}` as keyof typeof paths]
-        );
 
         const amount = utils.parseUnits(
             total,
@@ -347,7 +388,7 @@ const PackagePurchaseModal: FC<IProps> = ({
         await insure({
             planId,
             amount,
-            path,
+            path: tradeDetails.path,
             insureCoin: insureCoinName,
             paymentToken: paymentTokenName,
             callbacks,
@@ -476,7 +517,9 @@ const PackagePurchaseModal: FC<IProps> = ({
                                         userSelectedPaymentTokenDetails.balance,
                                         userSelectedPaymentTokenDetails.decimal as number
                                     )
-                                )} ${userSelectedPaymentTokenDetails.symbol}`}
+                                ).toFixed(2)} ${
+                                    userSelectedPaymentTokenDetails.symbol
+                                }`}
                             </span>
                         ) : (
                             <span className={styles.balance}>
@@ -499,6 +542,21 @@ const PackagePurchaseModal: FC<IProps> = ({
                         <span className={styles.key}>Selected coin</span>
                         <span className={styles.value}>{coin}</span>
                     </div>
+                    {(tradeDetails.expectedOutput ||
+                        tradeDetails.processing) && (
+                        <div className={styles.key__value}>
+                            <span className={styles.key}>Minimum recieved</span>
+                            <span className={styles.value}>
+                                {tradeDetails.processing ? (
+                                    <Loading />
+                                ) : (
+                                    `${(+tradeDetails.expectedOutput!).toFixed(
+                                        4
+                                    )} ${coin}`
+                                )}
+                            </span>
+                        </div>
+                    )}
                     <div className={styles.key__value}>
                         <span className={styles.key}>Lock up period</span>
                         <span
@@ -519,7 +577,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                     </div>
                 </div>
 
-                {total !== "0" &&
+                {Number(total) >= 0 &&
                     userSelectedPaymentTokenDetails.balance &&
                     userSelectedPaymentTokenDetails.decimal &&
                     userSelectedPaymentTokenDetails.balance?.lt(
@@ -533,7 +591,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                         </span>
                     )}
 
-                {total !== "0" &&
+                {Number(total) >= 0 &&
                     userSelectedPaymentTokenDetails.balance &&
                     userSelectedPaymentTokenDetails.decimal &&
                     userSelectedPaymentTokenDetails.allowance &&
@@ -561,7 +619,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                         </button>
                     )}
 
-                {total !== "0" &&
+                {Number(total) > 0 &&
                     userSelectedPaymentTokenDetails.balance &&
                     userSelectedPaymentTokenDetails.decimal &&
                     userSelectedPaymentTokenDetails.allowance &&
@@ -587,7 +645,7 @@ const PackagePurchaseModal: FC<IProps> = ({
                         </button>
                     )}
 
-                {total === "0" && (
+                {Number(total) === 0 && (
                     <span className={styles.message}>Input amount</span>
                 )}
             </form>
