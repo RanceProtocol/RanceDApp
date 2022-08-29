@@ -28,10 +28,6 @@ export const ConnectedModal: FC<IProps> = ({
         toggleAccountModal(dispatch);
     };
     const { account } = useWeb3React();
-    const MUSD = useToken(
-        tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
-            .MUSD
-    );
     const RANCE = useToken(
         tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
             .RANCE
@@ -77,10 +73,7 @@ export const ConnectedModal: FC<IProps> = ({
 
             <div className={styles.wallet__balance}>
                 <span className={styles.balance__value}>{`${Number(
-                    utils.formatUnits(MUSD.balance, MUSD.decimals)
-                ).toFixed(2)} MUSD`}</span>
-                <span className={styles.balance__value}>{`${Number(
-                    utils.formatUnits(RANCE.balance, MUSD.decimals)
+                    utils.formatUnits(RANCE.balance, RANCE.decimals)
                 ).toFixed(2)} RANCE`}</span>
                 <span className={styles.balance__key}>Wallet balance</span>
             </div>

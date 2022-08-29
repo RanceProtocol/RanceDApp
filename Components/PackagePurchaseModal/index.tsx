@@ -120,7 +120,6 @@ const PackagePurchaseModal: FC<IProps> = ({
                     amount: formDetails.amount,
                     provider: getDefaultProvider(),
                 });
-                console.log("trade: ", trade);
 
                 setTradeDetails({ processing: false, ...trade });
             } catch (error) {
