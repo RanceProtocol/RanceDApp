@@ -78,7 +78,6 @@ export const findBestRoute = async (
             amount,
             TradeDirection.input
         );
-        console.log(result.bestRouteQuote);
 
         return {
             path: result.bestRouteQuote.routePathArray,
