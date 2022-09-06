@@ -58,6 +58,16 @@ export const findBestRoute = async (
                     symbol: "WCRO",
                     name: "Wrapped CRO",
                 },
+                baseTokens: {
+                    dai: {
+                        chainId: 25,
+                        contractAddress:
+                            "0x97749c9B61F878a880DfE312d2594AE07AEd7656",
+                        decimals: 18,
+                        symbol: "MMF",
+                        name: "MMF",
+                    },
+                },
             },
         }),
     });
@@ -68,6 +78,7 @@ export const findBestRoute = async (
             amount,
             TradeDirection.input
         );
+        console.log(result.bestRouteQuote);
 
         return {
             path: result.bestRouteQuote.routePathArray,

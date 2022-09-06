@@ -112,7 +112,12 @@ const PackagePurchaseModal: FC<IProps> = ({
         }
 
         (async () => {
-            setTradeDetails((prev) => ({ ...prev, processing: true }));
+            setTradeDetails((prev) => ({
+                ...prev,
+                path: null,
+                expectedOutput: null,
+                processing: true,
+            }));
             try {
                 const trade = await findBestRoute({
                     fromTokenContractAddress: paymentToken!.value,
