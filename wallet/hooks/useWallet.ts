@@ -1,52 +1,92 @@
 import { AbstractConnector } from "@web3-react/abstract-connector";
-import { injected, walletConnect } from "../connnectors";
+import { bitKeep, injected, walletConnect } from "../connnectors";
 import { useWeb3React } from "@web3-react/core";
 import {
     getSupportedChainsName,
     supportedChainIds,
 } from "../../constants/chainIds";
 import { addNetwork, getConnectionError } from "../utils";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import CustomToast, { STATUS, TYPE } from "../../Components/CustomToast";
 import { toast } from "react-toastify";
 import { getChainId } from "../../utils/helpers";
+import { walletStrings } from "../constant";
 
 const useWallet = () => {
-    const { activate, deactivate, active } = useWeb3React();
+    const { activate, deactivate } = useWeb3React();
 
     useEffect(() => {
-        injected.isAuthorized().then(async (isAuthorized: boolean) => {
-            if (
-                isAuthorized &&
-                ["metamask", "trustwallet", "safepal"].includes(
-                    window.localStorage.getItem("wallet") as string
-                )
-            )
-                try {
-                    await activate(injected, undefined, true);
-                } catch (error) {
-                    const errorMessage = getConnectionError(error);
-                    const body = CustomToast({
-                        message: errorMessage,
-                        status: STATUS.ERROR,
-                        type: TYPE.ERROR,
-                    });
-                    toast(body);
+        setTimeout(() => {
+            injected.isAuthorized().then(async (isAuthorized: boolean) => {
+                if (
+                    isAuthorized &&
+                    [
+                        walletStrings.metamask,
+                        walletStrings.trustwallet,
+                        walletStrings.safepal,
+                    ].includes(window.localStorage.getItem("wallet") as string)
+                ) {
+                    try {
+                        await activate(injected, undefined, true);
+                    } catch (error) {
+                        const errorMessage = getConnectionError(error);
+                        const body = CustomToast({
+                            message: errorMessage,
+                            status: STATUS.ERROR,
+                            type: TYPE.ERROR,
+                        });
+                        toast(body);
+                    }
+                } else {
+                    bitKeep
+                        .isAuthorized()
+                        .then(async (isAuthorized: boolean) => {
+                            if (
+                                isAuthorized &&
+                                [walletStrings.bitkeep].includes(
+                                    window.localStorage.getItem(
+                                        "wallet"
+                                    ) as string
+                                )
+                            ) {
+                                try {
+                                    await activate(bitKeep, undefined, true);
+                                } catch (error) {
+                                    const errorMessage =
+                                        getConnectionError(error);
+                                    const body = CustomToast({
+                                        message: errorMessage,
+                                        status: STATUS.ERROR,
+                                        type: TYPE.ERROR,
+                                    });
+                                    toast(body);
+                                }
+                            }
+                        });
                 }
-        });
+            });
+        }, 1000);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const connectWallet = useCallback(
         async (name: string) => {
             let connector: AbstractConnector;
             const walletName = name;
-            const injectedWallets = ["metamask", "trustwallet", "safepal"];
+            const injectedWallets = [
+                walletStrings.metamask,
+                walletStrings.trustwallet,
+                walletStrings.safepal,
+            ];
             if (injectedWallets.includes(name)) name = "injected";
             switch (name) {
                 case "injected":
                     connector = injected;
                     break;
-                case "walletconnect":
+                case walletStrings.bitkeep:
+                    connector = bitKeep;
+                    break;
+                case walletStrings.walletconnect:
                     connector = walletConnect;
                     break;
                 default:
@@ -57,12 +97,11 @@ const useWallet = () => {
                 await activate(connector);
                 const chainId = await connector.getChainId();
                 const provider = await connector.getProvider();
-
                 if (
                     !Object.values(supportedChainIds).includes(
                         Number(chainId)
                     ) &&
-                    name === "injected"
+                    (name === "injected" || name === walletStrings.bitkeep)
                 ) {
                     try {
                         await addNetwork(provider);
@@ -117,15 +156,6 @@ const useWallet = () => {
     );
 
     const disconnectWallet = () => {
-        let connector: AbstractConnector;
-        const connectedWalletName = window.localStorage.getItem("wallet");
-        if (
-            ["metamask", "trustwallet", "safepal"].includes(
-                connectedWalletName as string
-            )
-        )
-            connector = injected;
-        else connector = walletConnect;
         deactivate();
         window.localStorage.removeItem("wallet");
     };

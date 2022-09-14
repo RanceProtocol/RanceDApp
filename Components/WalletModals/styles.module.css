@@ -28,7 +28,7 @@
     sm:text-sm
     text-theme-gray-2
     text-center
-    my-6
+    my-6;
 }
 
 .notice {
@@ -38,17 +38,17 @@
     bg-theme-red-alpha
     p-2
     sm:p-4
-    rounded-lg
+    rounded-lg;
 }
 
 .notice__icon {
-    @apply text-theme-red-1
+    @apply text-theme-red-1;
 }
 
 .notice__text {
     @apply text-theme-gray-2
     text-xs
-    sm:text-sm
+    sm:text-sm;
 }
 
 .close__btn {
@@ -56,7 +56,7 @@
     h-12
     block
     mt-4
-    mx-auto
+    mx-auto;
 }
 
 .close__icon__wrapper {
@@ -66,61 +66,59 @@
 }
 .connected__wallet__details {
     @apply my-8
-    text-center
+    text-center;
 }
-
 
 .connected__wallet__name {
     @apply block
     text-xs
-    text-center
-    
+    text-center;
 }
 
 .connected__wallet__address {
     @apply block
     text-center
     text-base
-    font-bold
+    font-bold;
 }
 
 .wallet__balance {
     @apply my-8
-    text-center
+    text-center;
 }
 
-.balance__value, .balance__key {
+.balance__value,
+.balance__key {
     @apply block
     text-xs
-    text-center
+    text-center;
 }
 
 .balance__value {
     @apply text-xl
-    font-bold
+    font-bold;
 }
 
 .balance__key {
-    @apply text-theme-gray-1
+    @apply text-theme-gray-1;
 }
 
 .btn__group {
     @apply flex
     gap-4
     justify-center
-    items-center
+    items-center;
 }
 
 .disconect__btn {
-    @apply
-    border-theme-red-2
+    @apply border-theme-red-2
     bg-theme-red-2
     hover:bg-theme-red-1
     text-theme-white
     w-full
     text-sm
     sm:text-base
-    rounded-full p-3
+    rounded-full p-3;
 }
 
 .buy__btn {
@@ -129,7 +127,7 @@
     text-center
     text-sm
     sm:text-base
-    rounded-full p-3
+    rounded-full p-3;
 }
 
 .connected__wallet__icon__wrapper {
@@ -144,7 +142,7 @@
     grid-cols-2
     gap-2
     sm:gap-4
-    my-4
+    my-4;
 }
 
 .wallet__btn {
@@ -157,12 +155,11 @@
     border
     border-theme-primary-1
     hover:border-theme-secondary-1
-    transition-all
+    transition-all;
 }
 
 .wallet__name {
     @apply block
     mt-4
-    text-sm
+    text-xs;
 }
-
