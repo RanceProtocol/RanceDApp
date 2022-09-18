@@ -65,7 +65,7 @@ const InsurancePackagePlanCard: FC<IProp> = (props) => {
                 </div>
                 <div className={styles.key__value}>
                     <span className={styles.value}>
-                        {Number(utils.formatEther(0))}{" "}
+                        {Number(utils.formatEther(unsureFee))}{" "}
                         <span className={styles.value__unit}>RANCE</span>
                     </span>
                     <span className={styles.key}>Unsurance Fee</span>
