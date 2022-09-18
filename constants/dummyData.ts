@@ -14,7 +14,7 @@ export interface IinsurancePackagePlan {
     timeUnit: "MTH" | "YR" | "YRS";
     timeUnitFull: "months" | "year" | "years";
     insuranceFee: number;
-    uninsureFee: BigNumber;
+    unsureFee: BigNumber;
 }
 
 export interface IInsurancePackage {
@@ -62,7 +62,7 @@ export const insurancePackagePlans: IinsurancePackagePlan[] = [
         timeUnit: "MTH",
         timeUnitFull: "months",
         insuranceFee: 100,
-        uninsureFee: utils.parseEther("10"),
+        unsureFee: utils.parseEther("10"),
     },
     {
         packageType: PackageEnum.GOLD,
@@ -71,7 +71,7 @@ export const insurancePackagePlans: IinsurancePackagePlan[] = [
         timeUnit: "YR",
         timeUnitFull: "year",
         insuranceFee: 50,
-        uninsureFee: utils.parseEther("100"),
+        unsureFee: utils.parseEther("100"),
     },
     {
         packageType: PackageEnum.PLATINUM,
@@ -80,7 +80,7 @@ export const insurancePackagePlans: IinsurancePackagePlan[] = [
         timeUnit: "YRS",
         timeUnitFull: "years",
         insuranceFee: 25,
-        uninsureFee: utils.parseEther("1000"),
+        unsureFee: utils.parseEther("1000"),
     },
 ];
 
@@ -103,7 +103,7 @@ export const insurancePackages: IInsurancePackage[] = [
             timeUnit: "YR",
             timeUnitFull: "year",
             insuranceFee: 50,
-            uninsureFee: utils.parseEther("10"),
+            unsureFee: utils.parseEther("10"),
         },
     },
     {
@@ -124,7 +124,7 @@ export const insurancePackages: IInsurancePackage[] = [
             timeUnit: "YRS",
             timeUnitFull: "years",
             insuranceFee: 25,
-            uninsureFee: utils.parseEther("100"),
+            unsureFee: utils.parseEther("100"),
         },
     },
 ];

@@ -19,14 +19,13 @@ const InsurancePackagePlanCard: FC<IProp> = (props) => {
         duration,
         insuranceFee,
         timeUnit,
-        uninsureFee,
+        unsureFee,
         onClickAction,
         insurableCoins,
     } = props;
     const { account } = useWeb3React();
 
     const dispatch = useDispatch();
-    
 
     return (
         <div className={styles.insurance__package__card}>
@@ -66,7 +65,7 @@ const InsurancePackagePlanCard: FC<IProp> = (props) => {
                 </div>
                 <div className={styles.key__value}>
                     <span className={styles.value}>
-                        {Number(utils.formatEther(uninsureFee))}{" "}
+                        {Number(utils.formatEther(0))}{" "}
                         <span className={styles.value__unit}>RANCE</span>
                     </span>
                     <span className={styles.key}>Unsurance Fee</span>

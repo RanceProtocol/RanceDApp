@@ -300,7 +300,7 @@ const WithdrawInsuranceModal: FC<IProps> = ({
                     process.env
                         .NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof ranceProtocol
                 ],
-                selectedPackage?.uninsureFee as BigNumber,
+                selectedPackage?.unsureFee as BigNumber,
                 callbacks
             );
         } catch (error: any) {
@@ -399,11 +399,9 @@ const WithdrawInsuranceModal: FC<IProps> = ({
                         {currentTimeStamp >
                         (selectedPackage?.endTimestamp as number)
                             ? "0 RANCE"
-                            : selectedPackage?.uninsureFee &&
+                            : selectedPackage?.unsureFee &&
                               `${Number(
-                                  utils.formatEther(
-                                      selectedPackage?.uninsureFee
-                                  )
+                                  utils.formatEther(selectedPackage?.unsureFee)
                               )} RANCE`}
                     </span>
                 </div>
@@ -438,9 +436,7 @@ const WithdrawInsuranceModal: FC<IProps> = ({
             {currentTimeStamp !== 0 &&
                 (selectedPackage?.endTimestamp as number) >= currentTimeStamp &&
                 RanceAllowance &&
-                (RanceAllowance.lt(
-                    selectedPackage?.uninsureFee as BigNumber
-                ) ? (
+                (RanceAllowance.lt(selectedPackage?.unsureFee as BigNumber) ? (
                     <button
                         className={clsx(styles.action__btn, styles.cancel__btn)}
                         onClick={handleApproveRance}
@@ -456,7 +452,10 @@ const WithdrawInsuranceModal: FC<IProps> = ({
                         className={clsx(styles.action__btn, styles.cancel__btn)}
                         onClick={handleApproveInsureCoin}
                         disabled={sendingTx}
-                    >{`Approve ${addressToCoinDetails[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails][
+                    >{`Approve ${addressToCoinDetails[
+                        process.env
+                            .NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof addressToCoinDetails
+                    ][
                         selectedPackage?.insureCoin as string
                     ].symbol.toUpperCase()}`}</button>
                 ) : (
