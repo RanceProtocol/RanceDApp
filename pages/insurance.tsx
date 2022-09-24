@@ -10,7 +10,6 @@ import InsurancePackagePlans from "../Components/InsurancePackagePlans";
 import MyPackages from "../Components/MyPackages";
 
 const Insurance: NextPage = () => {
-
     const router = useRouter();
     const tab = router.query.tab;
 
@@ -27,8 +26,8 @@ const Insurance: NextPage = () => {
                                 Insurance Info
                             </h1>
                             <p className={styles.banner__text}>
-                                Stabilise coins at your desired price with up to 2
-                                years Insurance protection.
+                                Stabilise coins at your desired price with up to
+                                2 years Insurance protection.
                             </p>
                         </div>
                         <div className={styles.banner__image__container}>
@@ -45,41 +44,44 @@ const Insurance: NextPage = () => {
                             <li>
                                 <button
                                     onClick={() =>
-                                        router.push(`${router.pathname}?tab=${tabs.myPackages}`)
-                                    }
-                                    className={clsx({
-                                        [styles.active_tab]:
-                                            String(tab).toLowerCase() !==
-                                            tabs.insurancePackages,
-                                            [styles.tab_btn]: true
-                                    })}
-                                >
-                                    My Packages
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    onClick={() =>
                                         router.push(
                                             `${router.pathname}?tab=${tabs.insurancePackages}`
                                         )
                                     }
                                     className={clsx({
                                         [styles.active_tab]:
-                                            String(tab).toLowerCase() ===
-                                            tabs.insurancePackages,
-                                            [styles.tab_btn]: true
+                                            String(tab).toLowerCase() !==
+                                            tabs.myPackages,
+                                        [styles.tab_btn]: true,
                                     })}
                                 >
                                     Insurance Packages
                                 </button>
                             </li>
+                            <li>
+                                <button
+                                    onClick={() =>
+                                        router.push(
+                                            `${router.pathname}?tab=${tabs.myPackages}`
+                                        )
+                                    }
+                                    className={clsx({
+                                        [styles.active_tab]:
+                                            String(tab).toLowerCase() ===
+                                            tabs.myPackages,
+                                        [styles.tab_btn]: true,
+                                    })}
+                                >
+                                    My Packages
+                                </button>
+                            </li>
                         </ul>
                     </div>
-                    {String(tab).toLowerCase() !== tabs.insurancePackages ? 
-                        <MyPackages /> : 
+                    {String(tab).toLowerCase() !== tabs.myPackages ? (
                         <InsurancePackagePlans />
-                    }
+                    ) : (
+                        <MyPackages />
+                    )}
                 </main>
             </div>
         </Fragment>
