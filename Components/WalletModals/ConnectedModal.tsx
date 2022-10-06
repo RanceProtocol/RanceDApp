@@ -50,8 +50,7 @@ export const ConnectedModal: FC<IProps> = ({
         >
             <h2 className={styles.heading}>Wallet connected</h2>
             <p className={styles.sub__heading}>
-                Connect a wallet of your choice to have access to the Rance
-                protocol
+                Connect a wallet of your choice to have access to Rance protocol
             </p>
             <div className={styles.connected__wallet__details}>
                 {connectedWallet && (
