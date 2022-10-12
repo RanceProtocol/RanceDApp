@@ -9,17 +9,17 @@ export const store = configureStore({
     reducer: {
         sharedState: sharedReducer,
         insurance: insuranceReducer,
-        staking: stakingReducer
+        staking: stakingReducer,
     },
     middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-      immutableCheck:false
-    })
-})
+        getDefaultMiddleware({
+            serializableCheck: false,
+            immutableCheck: false,
+        }),
+});
 
 export interface IAppState {
-    sharedState: ISharedState
-    insurance: IInsuranceStore
-    staking: IStakingStore
+    sharedState: ISharedState;
+    insurance: IInsuranceStore;
+    staking: IStakingStore;
 }
