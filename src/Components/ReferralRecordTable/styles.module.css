@@ -1,0 +1,66 @@
+.root {
+    @apply w-full md:col-span-2 order-4
+    md:order-3;
+}
+
+.table__container {
+    @apply w-full overflow-x-auto;
+}
+.table {
+    @apply w-full
+    text-left;
+}
+
+.table__head__container {
+    @apply bg-theme-white-alpha-5;
+}
+
+.table__head {
+    @apply p-4;
+}
+
+.table__body__container {
+}
+
+.table__row:nth-child(even) {
+    @apply bg-theme-secondary-alpha-5;
+}
+.table__data {
+    @apply px-4 py-6 text-sm whitespace-nowrap;
+}
+
+.status__availble {
+    @apply text-theme-green;
+}
+
+.status__withdrawn {
+    @apply text-theme-white-alpha-6;
+}
+.status__cell {
+    @apply flex justify-between items-center;
+}
+.withdraw__btn {
+    @apply bg-theme-green text-theme-white ml-4 px-3 py-1 rounded;
+}
+
+.pagination {
+    @apply flex
+    justify-between
+    mt-4;
+}
+
+.page__info {
+    @apply text-xs;
+}
+
+.control__btns {
+    @apply flex gap-4 text-lg;
+}
+
+.btns {
+    @apply cursor-pointer p-20 bg-theme-secondary-3;
+}
+
+.btns:hover {
+    @apply bg-theme-secondary-3;
+}
