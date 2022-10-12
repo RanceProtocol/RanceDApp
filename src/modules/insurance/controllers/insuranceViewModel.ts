@@ -9,7 +9,7 @@ import {
     initializePackagePlans as initializePackagePlansAction,
     intializeUserPackages as intializeUserPackagesAction,
     removeUserPackage as removeUserPackageAction,
-} from "../ui/redux/actions";
+} from "../infrastructure/redux/actions";
 import { insure as insureUseCase } from "../usecases/insure";
 import { cancelInsurance as cancelInsuranceUseCase } from "../usecases/cancelInsurance";
 import { withdrawInsurance as withdrawInsuranceUseCase } from "../usecases/withdrawInsurance";
@@ -69,6 +69,7 @@ export const useInsuranceViewModel = (props: IProps) => {
         path: string[];
         insureCoin: string;
         paymentToken: string;
+        referrer?: string;
         callbacks: { [key: string]: (errorMessage?: string) => void };
     }
 
@@ -79,6 +80,7 @@ export const useInsuranceViewModel = (props: IProps) => {
             path,
             insureCoin,
             paymentToken,
+            referrer,
             callbacks,
         }: IinsureParams): Promise<void> => {
             await insureUseCase({
@@ -88,6 +90,7 @@ export const useInsuranceViewModel = (props: IProps) => {
                 path,
                 insureCoin,
                 paymentToken,
+                referrer,
                 send,
                 callbacks,
             });

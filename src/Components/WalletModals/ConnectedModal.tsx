@@ -9,6 +9,7 @@ import { tokens } from "../../constants/addresses";
 import { utils } from "ethers";
 import { shortenAddress } from "../../utils/helpers";
 import { useWeb3React } from "@web3-react/core";
+import { walletLocalStorageKey } from "../../wallet/constant";
 
 interface IProps {
     open: boolean;
@@ -37,7 +38,7 @@ export const ConnectedModal: FC<IProps> = ({
 
     useEffect(() => {
         if (!account) return;
-        const wallet = window.localStorage.getItem("wallet");
+        const wallet = window.localStorage.getItem(walletLocalStorageKey);
         setConnectedWallet(wallet);
     }, [account, open]);
 

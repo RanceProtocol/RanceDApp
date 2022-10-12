@@ -6,7 +6,7 @@ import SuccessModal from "../SuccessModal";
 import { useWeb3React } from "@web3-react/core";
 import { useInsuranceViewModel } from "../../modules/insurance/controllers/insuranceViewModel";
 import MyPackageCardSkeleton from "./myPackageCardSkeleton";
-import { insuranceState } from "../../modules/insurance/ui/redux/state";
+import { insuranceState } from "../../modules/insurance/infrastructure/redux/state";
 
 const MyPackages = () => {
     const [withdrawModalState, setWithdrawModalState] = useState<{
@@ -23,10 +23,11 @@ const MyPackages = () => {
 
     const { account, library } = useWeb3React();
 
-    const { intializeUserPackages, cancelInsurance, withdrawInsurance } = useInsuranceViewModel({
-        address: account,
-        provider: library,
-    });
+    const { intializeUserPackages, cancelInsurance, withdrawInsurance } =
+        useInsuranceViewModel({
+            address: account,
+            provider: library,
+        });
 
     useEffect(() => {
         intializeUserPackages();
@@ -38,18 +39,27 @@ const MyPackages = () => {
     const { loadingUserPackages, userPackages } = state;
 
     const handleSetSucessModal = (type: "cancelation" | "withdrawal") => {
-        setActionSuccessFull({state: true, type})
-    }
-    const [actionSuccessFull, setActionSuccessFull] = useState<{state:boolean, type: "cancelation" | "withdrawal" | undefined}>({state: false, type: undefined})
+        setActionSuccessFull({ state: true, type });
+    };
+    const [actionSuccessFull, setActionSuccessFull] = useState<{
+        state: boolean;
+        type: "cancelation" | "withdrawal" | undefined;
+    }>({ state: false, type: undefined });
 
     useEffect(() => {
-        if(actionSuccessFull.state && actionSuccessFull.type === "cancelation") {
-            setShowCancelSuccess(true)
-        }else if(actionSuccessFull.state && actionSuccessFull.type === "withdrawal") {
-            setShowWithdrawSuccess(true)
+        if (
+            actionSuccessFull.state &&
+            actionSuccessFull.type === "cancelation"
+        ) {
+            setShowCancelSuccess(true);
+        } else if (
+            actionSuccessFull.state &&
+            actionSuccessFull.type === "withdrawal"
+        ) {
+            setShowWithdrawSuccess(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [actionSuccessFull.state])
+    }, [actionSuccessFull.state]);
 
     return (
         <Fragment>
@@ -78,13 +88,17 @@ const MyPackages = () => {
                     </p>
                 )}
             </div>
-            {withdrawModalState.id && <WithdrawInsuranceModal
-                state={withdrawModalState}
-                cancelInsurance = {cancelInsurance}
-                withdrawInsurance = {withdrawInsurance}
-                onClose={() => setWithdrawModalState({ open: false, id: null })}
-                onSuccessFull = {handleSetSucessModal}
-            />}
+            {withdrawModalState.id && (
+                <WithdrawInsuranceModal
+                    state={withdrawModalState}
+                    cancelInsurance={cancelInsurance}
+                    withdrawInsurance={withdrawInsurance}
+                    onClose={() =>
+                        setWithdrawModalState({ open: false, id: null })
+                    }
+                    onSuccessFull={handleSetSucessModal}
+                />
+            )}
 
             <SuccessModal
                 state={{

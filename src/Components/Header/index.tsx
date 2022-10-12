@@ -6,17 +6,20 @@ import styles from "./styles.module.css";
 import clsx from "clsx";
 import { routes } from "../../constants/routes";
 import { useWeb3React } from "@web3-react/core";
-import { shortenAddress } from "../../utils/helpers";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
-import { toggleAccountModal, toggleWalletModal } from "../../appState/shared/action";
+import {
+    toggleAccountModal,
+    toggleWalletModal,
+} from "../../appState/shared/action";
+import { shortenAddress } from "../../utils/helpers";
 
 interface IProp {}
 
 const Header: FC<IProp> = () => {
     const router = useRouter();
     const { active, account } = useWeb3React();
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     return (
         <header className={styles.root}>
             <Link href="/">
@@ -59,27 +62,43 @@ const Header: FC<IProp> = () => {
                             </a>
                         </Link>
                     </li>
+                    <li>
+                        <Link href={routes.referral}>
+                            <a
+                                className={clsx({
+                                    [styles.link]: true,
+                                    [styles.active__link]:
+                                        router.pathname === routes.referral,
+                                })}
+                            >
+                                Referral
+                            </a>
+                        </Link>
+                    </li>
                 </ul>
             </nav>
             {active ? (
                 <div className={styles.connected}>
-                    {window.localStorage.getItem(
-                            "wallet"
-                        )&& <div className={styles.connected__wallet}>
-                        <div className={styles.connected__wallet__icon}>
-                            <Image
-                                src={`/icons/${window.localStorage.getItem(
-                                    "wallet"
-                                )}.png`}
-                                alt="wallet Icon"
-                                layout="fill"
-                            />
+                    {window.localStorage.getItem("wallet") && (
+                        <div className={styles.connected__wallet}>
+                            <div className={styles.connected__wallet__icon}>
+                                <Image
+                                    src={`/icons/${window.localStorage.getItem(
+                                        "wallet"
+                                    )}.png`}
+                                    alt="wallet Icon"
+                                    layout="fill"
+                                />
+                            </div>
+                            <span>{`${window.localStorage.getItem(
+                                "wallet"
+                            )} connected`}</span>
                         </div>
-                        <span>{`${window.localStorage.getItem(
-                            "wallet"
-                        )} connected`}</span>
-                    </div>}
-                    <button className={styles.connected__btn} onClick = {() => toggleAccountModal(dispatch)}>
+                    )}
+                    <button
+                        className={styles.connected__btn}
+                        onClick={() => toggleAccountModal(dispatch)}
+                    >
                         <span>{shortenAddress(account as string)}</span>
                         <RiArrowDropDownLine
                             className={styles.connected__btn__dropdown__icon}
@@ -87,7 +106,12 @@ const Header: FC<IProp> = () => {
                     </button>
                 </div>
             ) : (
-                <button className={styles.connect__btn} onClick = {() => toggleWalletModal(dispatch)}>Connect wallet</button>
+                <button
+                    className={styles.connect__btn}
+                    onClick={() => toggleWalletModal(dispatch)}
+                >
+                    Connect wallet
+                </button>
             )}
         </header>
     );

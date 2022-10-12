@@ -5,7 +5,7 @@ import InsurancePackagePlanCardSkeleton from "./insurancePackagePlanCardSkeleton
 import PackagePurchaseModal from "../PackagePurchaseModal";
 import { useWeb3React } from "@web3-react/core";
 import { useInsuranceViewModel } from "../../modules/insurance/controllers/insuranceViewModel";
-import { insuranceState } from "../../modules/insurance/ui/redux/state";
+import { insuranceState } from "../../modules/insurance/infrastructure/redux/state";
 import { IInsurancePackagePlan } from "../../modules/insurance/domain/entities";
 import SuccessModal from "../SuccessModal";
 import { useRouter } from "next/router";
@@ -17,7 +17,8 @@ const InsurancePackagePlans: FC<IProp> = () => {
     const [packagePurchaseModal, setPackagePurchaseModal] = useState<{
         open: boolean;
         planId: string;
-    }>({ open: false, planId: "" });
+        referrer: string | null;
+    }>({ open: false, planId: "", referrer: null });
 
     const router = useRouter();
 
@@ -30,31 +31,28 @@ const InsurancePackagePlans: FC<IProp> = () => {
 
     const state = insuranceState();
 
-    const { loadingPackagePlans, packagePlans, insurableCoins } = state;
+    const { loadingPackagePlans, packagePlans, insurableCoins, hasInsured } =
+        state;
 
     useEffect(() => {
         initializePackagePlans();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    let insurableCoinsSymbols = Object.keys(insurableCoins)
+    let insurableCoinsSymbols = Object.keys(insurableCoins);
 
-    const [successModalOpen, setSuccessModalOpen] = useState(false)
+    const [successModalOpen, setSuccessModalOpen] = useState(false);
 
-    const [purchaseSuccessfull, setPurchaseSuccessfull] = useState(false)
+    const [purchaseSuccessfull, setPurchaseSuccessfull] = useState(false);
 
     useEffect(() => {
-        purchaseSuccessfull && setSuccessModalOpen(true)
-    }, [purchaseSuccessfull])
+        purchaseSuccessfull && setSuccessModalOpen(true);
+    }, [purchaseSuccessfull]);
 
     const handleSuccessModalAction = () => {
-        setSuccessModalOpen(() => false)
-        router.push(
-            `${router.pathname}?tab=${insurancePageTabs.myPackages}`)
-
-    }
-    
-    
+        setSuccessModalOpen(() => false);
+        router.push(`${router.pathname}?tab=${insurancePageTabs.myPackages}`);
+    };
 
     return (
         <Fragment>
@@ -62,31 +60,37 @@ const InsurancePackagePlans: FC<IProp> = () => {
                 {loadingPackagePlans && !packagePlans.length
                     ? new Array(3)
                           .fill(undefined)
-                          .map((item, index) => <InsurancePackagePlanCardSkeleton key = {index} />)
+                          .map((item, index) => (
+                              <InsurancePackagePlanCardSkeleton key={index} />
+                          ))
                     : packagePlans.map(
                           (insurancePackage: IInsurancePackagePlan) => (
                               <InsurancePackagePlanCard
                                   key={insurancePackage.planId}
                                   {...insurancePackage}
                                   insurableCoins={insurableCoinsSymbols}
+                                  hasInsured={hasInsured as boolean}
                                   onClickAction={(data: {
                                       open: boolean;
                                       planId: string;
+                                      referrer: string | null;
                                   }) => setPackagePurchaseModal(data)}
                               />
                           )
                       )}
             </div>
-            {account && <PackagePurchaseModal
-                state={packagePurchaseModal}
-                onClose={() =>
-                    setPackagePurchaseModal((prev) => ({
-                        ...prev,
-                        open: false,
-                    }))
-                }
-                onSuccessfull = {() => setPurchaseSuccessfull(true)}
-            />}
+            {account && (
+                <PackagePurchaseModal
+                    state={packagePurchaseModal}
+                    onClose={() =>
+                        setPackagePurchaseModal((prev) => ({
+                            ...prev,
+                            open: false,
+                        }))
+                    }
+                    onSuccessfull={() => setPurchaseSuccessfull(true)}
+                />
+            )}
 
             <SuccessModal
                 state={{

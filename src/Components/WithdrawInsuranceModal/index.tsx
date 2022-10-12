@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from "react";
 import ModalWrapper from "../ModalWrapper";
 import styles from "./styles.module.css";
 import { BigNumber, utils } from "ethers";
-import { insuranceState } from "../../modules/insurance/ui/redux/state";
+import { insuranceState } from "../../modules/insurance/infrastructure/redux/state";
 import { IInsurancePackage } from "../../modules/insurance/domain/entities";
 import { ranceProtocol, tokens } from "../../constants/addresses";
 import { getCurrentTimestamp } from "../../utils/time";
@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { truncateString } from "../../utils/helpers";
 import useToken from "../../hooks/useToken";
 import { addressToCoinDetails } from "../../constants/dummyData";
+import useLazyToken from "../../hooks/useLazyToken";
 
 interface IProps {
     state: { open: boolean; id: string | null };
@@ -59,6 +60,23 @@ const WithdrawInsuranceModal: FC<IProps> = ({
         userPackages.find((item) => item.packageId === id)
             ?.paymentToken as string
     );
+
+    const [paymentTokenDecimals, setPaymetTokenDecimals] = useState<
+        number | null
+    >(null);
+
+    const { getDecimal } = useLazyToken();
+
+    useEffect(() => {
+        (async () => {
+            const decimal = await getDecimal(
+                userPackages.find((item) => item.packageId === id)
+                    ?.paymentToken as string
+            );
+            setPaymetTokenDecimals(decimal);
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const [RanceAllowance, setRanceAllowance] = useState<BigNumber>();
     const [insureCoinAllowance, setInsureCoinAllowance] = useState<BigNumber>();
@@ -370,8 +388,12 @@ const WithdrawInsuranceModal: FC<IProps> = ({
                 <span className={styles.receive}>You will receive</span>
                 <span className={styles.amount}>
                     {selectedPackage?.initialDeposit &&
+                        paymentTokenDecimals &&
                         `${Number(
-                            utils.formatEther(selectedPackage?.initialDeposit)
+                            utils.formatUnits(
+                                selectedPackage?.initialDeposit,
+                                paymentTokenDecimals
+                            )
                         )} ${paymentToken.symbol}`}
                 </span>
                 <span className={styles.insured__balance__text}>
@@ -382,15 +404,14 @@ const WithdrawInsuranceModal: FC<IProps> = ({
             <div className={styles.details}>
                 <div className={styles.key__value}>
                     <span className={styles.key}>Initial deposit</span>
-                    {selectedPackage?.initialDeposit && (
-                        <span className={styles.value}>
-                            {`${Number(
-                                utils.formatEther(
-                                    selectedPackage?.initialDeposit
-                                )
-                            )} ${paymentToken.symbol}`}
-                        </span>
-                    )}
+                    {selectedPackage?.initialDeposit &&
+                        paymentTokenDecimals &&
+                        `${Number(
+                            utils.formatUnits(
+                                selectedPackage?.initialDeposit,
+                                paymentTokenDecimals
+                            )
+                        )} ${paymentToken.symbol}`}
                 </div>
 
                 <div className={styles.key__value}>

@@ -9,8 +9,8 @@ import IInsuranceStore from "../domain/insuranceStore";
 export const getUserPackages = async (
     contract: RanceProtocol,
     userAddress: string | null | undefined
-): Promise<Pick<IInsuranceStore, "userPackages">> => {
-    if (!userAddress) return { userPackages: [] };
+): Promise<Pick<IInsuranceStore, "userPackages" | "hasInsured">> => {
+    if (!userAddress) return { userPackages: [], hasInsured: false };
 
     try {
         const packagesLength = await contract.getUserPackagesLength(
@@ -20,7 +20,7 @@ export const getUserPackages = async (
             await contract.getAllUserPackages(userAddress, 0, packagesLength);
 
         if (packages.length === 0) {
-            return { userPackages: [] };
+            return { userPackages: [], hasInsured: false };
         }
         const packagesPlansData: IRanceProtocol.PackagePlanStructOutput[] =
             await Promise.all(
@@ -34,11 +34,9 @@ export const getUserPackages = async (
                 structOutputToObject(item)
         );
 
-        const currentTimestamp = await getCurrentTimestamp();
-        if (!currentTimestamp) {
-            // if for some reason we can't get the current timeStamp (which is rare) theres no way to filter out packages that are still valid
-            throw new Error("something went wrong whlle getting pack");
-        }
+        const blockNumber = await contract.provider.getBlockNumber();
+        const { timestamp: currentTimestamp } =
+            await contract.provider.getBlock(blockNumber);
 
         const userPackages = formatedObject.map(
             (item: any, index: number): IInsurancePackage => {
@@ -64,7 +62,10 @@ export const getUserPackages = async (
             return validUntil > currentTimestamp && item.isCancelled === false;
         });
 
-        return { userPackages: validUserPackages };
+        return {
+            userPackages: validUserPackages,
+            hasInsured: userPackages.length !== 0,
+        };
     } catch (error: any) {
         console.log("getUserPackages: ", error);
         throw new Error(error);

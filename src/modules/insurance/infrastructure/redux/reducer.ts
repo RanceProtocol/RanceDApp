@@ -7,6 +7,7 @@ const initialState: IInsuranceStore = {
     loadingUserPackages: false,
     packagePlans: [],
     userPackages: [],
+    hasInsured: undefined,
     insurableCoins: {},
     paymentTokens: {},
 };
@@ -35,14 +36,18 @@ export const insuranceReducer = (
             return {
                 ...state,
                 userPackages: payload.userPackages,
+                hasInsured: payload.hasInsured,
                 loadingUserPackages: false,
             };
         case actionTypes.GET__USER__PACKAGES__FAILED:
             return { ...state, userPackages: [], loadingUserPackages: false };
 
         case actionTypes.REMOVE__USER__PACKAGE:
-            const filteredPackages = state.userPackages.filter((item: IInsurancePackage) => item.packageId !== payload.packageId)
-            return {...state, userPackages: filteredPackages}
+            const filteredPackages = state.userPackages.filter(
+                (item: IInsurancePackage) =>
+                    item.packageId !== payload.packageId
+            );
+            return { ...state, userPackages: filteredPackages };
         default:
             return state;
     }

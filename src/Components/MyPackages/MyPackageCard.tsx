@@ -98,9 +98,14 @@ const MyPackageCard: FC<IProp> = (props) => {
             <div className={styles.head}>
                 <span className={styles.balance}>
                     Current balance:{" "}
-                    <span className={styles.amount}>{`$${Number(
-                        utils.formatEther(initialDeposit)
-                    )}`}</span>
+                    {paymentTokenDecimals && (
+                        <span className={styles.amount}>{`$${Number(
+                            utils.formatUnits(
+                                initialDeposit,
+                                paymentTokenDecimals
+                            )
+                        )}`}</span>
+                    )}
                 </span>
                 {currentTimeStamp > (endTimestamp as number) && (
                     <span
@@ -133,9 +138,14 @@ const MyPackageCard: FC<IProp> = (props) => {
                         <span className={styles.key}>Package started</span>
                     </div>
                     <div className={styles.key__value}>
-                        <span className={styles.value}>{`$${Number(
-                            utils.formatEther(initialDeposit)
-                        )}`}</span>
+                        {paymentTokenDecimals && (
+                            <span className={styles.value}>{`$${Number(
+                                utils.formatUnits(
+                                    initialDeposit,
+                                    paymentTokenDecimals
+                                )
+                            )}`}</span>
+                        )}
                         <span className={styles.key}>Initial amount</span>
                     </div>
                     <div className={styles.key__value}>

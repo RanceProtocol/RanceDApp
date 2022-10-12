@@ -1,5 +1,4 @@
 import { Web3Provider } from "@ethersproject/providers";
-import { BigNumber } from "ethers";
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ranceProtocol } from "../../../constants/addresses";

@@ -1,0 +1,32 @@
+.root {
+    @apply flex
+    flex-col
+    items-center
+    gap-3
+    p-4
+    md:col-span-2;
+}
+
+.no__ref__code__image__container {
+    @apply w-28
+    h-20
+    relative;
+}
+
+.no__ref__code__image {
+}
+
+.no__ref__code__text {
+    @apply text-center
+    text-theme-white-alpha
+    text-xs;
+}
+
+.generate__link__button {
+    @apply border border-theme-secondary-1
+    text-theme-secondary-1
+    text-xs
+    py-2
+    px-3
+    rounded-full;
+}

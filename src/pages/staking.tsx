@@ -9,7 +9,7 @@ import { useStakingViewModel } from "../modules/staking/controllers/stakingViewM
 import { useWeb3React } from "@web3-react/core";
 import { useEffect } from "react";
 import { IStakingPool } from "../modules/staking/domain/entities";
-import { stakingState } from "../modules/staking/ui/redux/state";
+import { stakingState } from "../modules/staking/infrastructure/redux/state";
 import EarningCard from "../Components/StakingComponents/EarningCard";
 import PoolCardSkeleton from "../Components/StakingComponents/PoolCardSkeleton";
 import EarningSectionSkeleton from "../Components/StakingComponents/EarningSectionSkeleton";

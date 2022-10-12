@@ -5,3 +5,5 @@ export const walletStrings = {
     safepal: "safepal",
     walletconnect: "walletconnect",
 };
+
+export const walletLocalStorageKey = "wallet";
