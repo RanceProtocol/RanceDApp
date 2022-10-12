@@ -33,7 +33,7 @@ export declare namespace RanceProtocol {
         planId: PromiseOrValue<BytesLike>;
         periodInSeconds: PromiseOrValue<BigNumberish>;
         insuranceFee: PromiseOrValue<BigNumberish>;
-        unsureFee: PromiseOrValue<BigNumberish>;
+        uninsureFee: PromiseOrValue<BigNumberish>;
         isActivated: PromiseOrValue<boolean>;
     };
 
@@ -47,7 +47,7 @@ export declare namespace RanceProtocol {
         planId: string;
         periodInSeconds: number;
         insuranceFee: number;
-        unsureFee: BigNumber;
+        uninsureFee: BigNumber;
         isActivated: boolean;
     };
 
@@ -90,6 +90,34 @@ export declare namespace RanceProtocol {
         insureCoin: string;
         paymentToken: string;
     };
+
+    export type ReferralRewardStruct = {
+        id: PromiseOrValue<BytesLike>;
+        rewardAmount: PromiseOrValue<BigNumberish>;
+        timestamp: PromiseOrValue<BigNumberish>;
+        token: PromiseOrValue<string>;
+        referrer: PromiseOrValue<string>;
+        user: PromiseOrValue<string>;
+        claimed: PromiseOrValue<boolean>;
+    };
+
+    export type ReferralRewardStructOutput = [
+        string,
+        BigNumber,
+        BigNumber,
+        string,
+        string,
+        string,
+        boolean
+    ] & {
+        id: string;
+        rewardAmount: BigNumber;
+        timestamp: BigNumber;
+        token: string;
+        referrer: string;
+        user: string;
+        claimed: boolean;
+    };
 }
 
 export interface RanceProtocolInterface extends utils.Interface {
@@ -99,9 +127,11 @@ export interface RanceProtocolInterface extends utils.Interface {
         "addPackagePlan(uint32,uint8,uint256)": FunctionFragment;
         "addPaymentToken(string,address)": FunctionFragment;
         "cancel(bytes32)": FunctionFragment;
+        "claimReferralReward(bytes32[])": FunctionFragment;
         "deactivatePackagePlan(bytes32)": FunctionFragment;
         "getAllPackagePlans(uint256,uint256)": FunctionFragment;
         "getAllUserPackages(address,uint256,uint256)": FunctionFragment;
+        "getAllUserReferrals(address,uint256,uint256)": FunctionFragment;
         "getInsureAmount(bytes32,uint256)": FunctionFragment;
         "getInsureCoins(uint256,uint256)": FunctionFragment;
         "getInsureCoinsLength()": FunctionFragment;
@@ -110,11 +140,13 @@ export interface RanceProtocolInterface extends utils.Interface {
         "getPaymentTokensLength()": FunctionFragment;
         "getTotalInsuranceLocked(address)": FunctionFragment;
         "getUserPackagesLength(address)": FunctionFragment;
-        "initialize(address,address,address,address)": FunctionFragment;
+        "getUserReferralsLength(address)": FunctionFragment;
+        "initialize(address,address,address)": FunctionFragment;
         "insure(bytes32,uint256,address[],string,string)": FunctionFragment;
         "insureCoinAdded(address)": FunctionFragment;
         "insureCoinNameToAddress(string)": FunctionFragment;
         "insureCoins(uint256)": FunctionFragment;
+        "insureWithReferrer(bytes32,uint256,address[],string,string,address)": FunctionFragment;
         "isPackageActive((address,bytes32,bytes32,uint256,uint256,uint256,uint256,bool,bool,address,address))": FunctionFragment;
         "owner()": FunctionFragment;
         "packageIdToPackage(bytes32)": FunctionFragment;
@@ -124,17 +156,22 @@ export interface RanceProtocolInterface extends utils.Interface {
         "paymentTokens(uint256)": FunctionFragment;
         "planIdToPackagePlan(bytes32)": FunctionFragment;
         "proxiableUUID()": FunctionFragment;
+        "referralPercentage()": FunctionFragment;
+        "referrals(bytes32)": FunctionFragment;
         "removeInsureCoins(string[])": FunctionFragment;
         "removePaymentToken(string)": FunctionFragment;
         "renounceOwnership()": FunctionFragment;
+        "setRance(address)": FunctionFragment;
         "setTreasuryAddress(address)": FunctionFragment;
         "totalInsuranceLocked(address)": FunctionFragment;
         "transferOwnership(address)": FunctionFragment;
         "treasury()": FunctionFragment;
         "uniswapRouter()": FunctionFragment;
+        "updateReferralReward(uint256)": FunctionFragment;
         "upgradeTo(address)": FunctionFragment;
         "upgradeToAndCall(address,bytes)": FunctionFragment;
         "userToPackageIds(address,uint256)": FunctionFragment;
+        "userToReferralIds(address,uint256)": FunctionFragment;
         "withdraw(bytes32)": FunctionFragment;
     };
 
@@ -145,9 +182,11 @@ export interface RanceProtocolInterface extends utils.Interface {
             | "addPackagePlan"
             | "addPaymentToken"
             | "cancel"
+            | "claimReferralReward"
             | "deactivatePackagePlan"
             | "getAllPackagePlans"
             | "getAllUserPackages"
+            | "getAllUserReferrals"
             | "getInsureAmount"
             | "getInsureCoins"
             | "getInsureCoinsLength"
@@ -156,11 +195,13 @@ export interface RanceProtocolInterface extends utils.Interface {
             | "getPaymentTokensLength"
             | "getTotalInsuranceLocked"
             | "getUserPackagesLength"
+            | "getUserReferralsLength"
             | "initialize"
             | "insure"
             | "insureCoinAdded"
             | "insureCoinNameToAddress"
             | "insureCoins"
+            | "insureWithReferrer"
             | "isPackageActive"
             | "owner"
             | "packageIdToPackage"
@@ -170,17 +211,22 @@ export interface RanceProtocolInterface extends utils.Interface {
             | "paymentTokens"
             | "planIdToPackagePlan"
             | "proxiableUUID"
+            | "referralPercentage"
+            | "referrals"
             | "removeInsureCoins"
             | "removePaymentToken"
             | "renounceOwnership"
+            | "setRance"
             | "setTreasuryAddress"
             | "totalInsuranceLocked"
             | "transferOwnership"
             | "treasury"
             | "uniswapRouter"
+            | "updateReferralReward"
             | "upgradeTo"
             | "upgradeToAndCall"
             | "userToPackageIds"
+            | "userToReferralIds"
             | "withdraw"
     ): FunctionFragment;
 
@@ -206,6 +252,10 @@ export interface RanceProtocolInterface extends utils.Interface {
         values: [PromiseOrValue<BytesLike>]
     ): string;
     encodeFunctionData(
+        functionFragment: "claimReferralReward",
+        values: [PromiseOrValue<BytesLike>[]]
+    ): string;
+    encodeFunctionData(
         functionFragment: "deactivatePackagePlan",
         values: [PromiseOrValue<BytesLike>]
     ): string;
@@ -215,6 +265,14 @@ export interface RanceProtocolInterface extends utils.Interface {
     ): string;
     encodeFunctionData(
         functionFragment: "getAllUserPackages",
+        values: [
+            PromiseOrValue<string>,
+            PromiseOrValue<BigNumberish>,
+            PromiseOrValue<BigNumberish>
+        ]
+    ): string;
+    encodeFunctionData(
+        functionFragment: "getAllUserReferrals",
         values: [
             PromiseOrValue<string>,
             PromiseOrValue<BigNumberish>,
@@ -254,9 +312,12 @@ export interface RanceProtocolInterface extends utils.Interface {
         values: [PromiseOrValue<string>]
     ): string;
     encodeFunctionData(
+        functionFragment: "getUserReferralsLength",
+        values: [PromiseOrValue<string>]
+    ): string;
+    encodeFunctionData(
         functionFragment: "initialize",
         values: [
-            PromiseOrValue<string>,
             PromiseOrValue<string>,
             PromiseOrValue<string>,
             PromiseOrValue<string>
@@ -283,6 +344,17 @@ export interface RanceProtocolInterface extends utils.Interface {
     encodeFunctionData(
         functionFragment: "insureCoins",
         values: [PromiseOrValue<BigNumberish>]
+    ): string;
+    encodeFunctionData(
+        functionFragment: "insureWithReferrer",
+        values: [
+            PromiseOrValue<BytesLike>,
+            PromiseOrValue<BigNumberish>,
+            PromiseOrValue<string>[],
+            PromiseOrValue<string>,
+            PromiseOrValue<string>,
+            PromiseOrValue<string>
+        ]
     ): string;
     encodeFunctionData(
         functionFragment: "isPackageActive",
@@ -318,6 +390,14 @@ export interface RanceProtocolInterface extends utils.Interface {
         values?: undefined
     ): string;
     encodeFunctionData(
+        functionFragment: "referralPercentage",
+        values?: undefined
+    ): string;
+    encodeFunctionData(
+        functionFragment: "referrals",
+        values: [PromiseOrValue<BytesLike>]
+    ): string;
+    encodeFunctionData(
         functionFragment: "removeInsureCoins",
         values: [PromiseOrValue<string>[]]
     ): string;
@@ -328,6 +408,10 @@ export interface RanceProtocolInterface extends utils.Interface {
     encodeFunctionData(
         functionFragment: "renounceOwnership",
         values?: undefined
+    ): string;
+    encodeFunctionData(
+        functionFragment: "setRance",
+        values: [PromiseOrValue<string>]
     ): string;
     encodeFunctionData(
         functionFragment: "setTreasuryAddress",
@@ -350,6 +434,10 @@ export interface RanceProtocolInterface extends utils.Interface {
         values?: undefined
     ): string;
     encodeFunctionData(
+        functionFragment: "updateReferralReward",
+        values: [PromiseOrValue<BigNumberish>]
+    ): string;
+    encodeFunctionData(
         functionFragment: "upgradeTo",
         values: [PromiseOrValue<string>]
     ): string;
@@ -359,6 +447,10 @@ export interface RanceProtocolInterface extends utils.Interface {
     ): string;
     encodeFunctionData(
         functionFragment: "userToPackageIds",
+        values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    ): string;
+    encodeFunctionData(
+        functionFragment: "userToReferralIds",
         values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
     ): string;
     encodeFunctionData(
@@ -381,6 +473,10 @@ export interface RanceProtocolInterface extends utils.Interface {
     ): Result;
     decodeFunctionResult(functionFragment: "cancel", data: BytesLike): Result;
     decodeFunctionResult(
+        functionFragment: "claimReferralReward",
+        data: BytesLike
+    ): Result;
+    decodeFunctionResult(
         functionFragment: "deactivatePackagePlan",
         data: BytesLike
     ): Result;
@@ -390,6 +486,10 @@ export interface RanceProtocolInterface extends utils.Interface {
     ): Result;
     decodeFunctionResult(
         functionFragment: "getAllUserPackages",
+        data: BytesLike
+    ): Result;
+    decodeFunctionResult(
+        functionFragment: "getAllUserReferrals",
         data: BytesLike
     ): Result;
     decodeFunctionResult(
@@ -425,6 +525,10 @@ export interface RanceProtocolInterface extends utils.Interface {
         data: BytesLike
     ): Result;
     decodeFunctionResult(
+        functionFragment: "getUserReferralsLength",
+        data: BytesLike
+    ): Result;
+    decodeFunctionResult(
         functionFragment: "initialize",
         data: BytesLike
     ): Result;
@@ -439,6 +543,10 @@ export interface RanceProtocolInterface extends utils.Interface {
     ): Result;
     decodeFunctionResult(
         functionFragment: "insureCoins",
+        data: BytesLike
+    ): Result;
+    decodeFunctionResult(
+        functionFragment: "insureWithReferrer",
         data: BytesLike
     ): Result;
     decodeFunctionResult(
@@ -475,6 +583,14 @@ export interface RanceProtocolInterface extends utils.Interface {
         data: BytesLike
     ): Result;
     decodeFunctionResult(
+        functionFragment: "referralPercentage",
+        data: BytesLike
+    ): Result;
+    decodeFunctionResult(
+        functionFragment: "referrals",
+        data: BytesLike
+    ): Result;
+    decodeFunctionResult(
         functionFragment: "removeInsureCoins",
         data: BytesLike
     ): Result;
@@ -486,6 +602,7 @@ export interface RanceProtocolInterface extends utils.Interface {
         functionFragment: "renounceOwnership",
         data: BytesLike
     ): Result;
+    decodeFunctionResult(functionFragment: "setRance", data: BytesLike): Result;
     decodeFunctionResult(
         functionFragment: "setTreasuryAddress",
         data: BytesLike
@@ -504,6 +621,10 @@ export interface RanceProtocolInterface extends utils.Interface {
         data: BytesLike
     ): Result;
     decodeFunctionResult(
+        functionFragment: "updateReferralReward",
+        data: BytesLike
+    ): Result;
+    decodeFunctionResult(
         functionFragment: "upgradeTo",
         data: BytesLike
     ): Result;
@@ -513,6 +634,10 @@ export interface RanceProtocolInterface extends utils.Interface {
     ): Result;
     decodeFunctionResult(
         functionFragment: "userToPackageIds",
+        data: BytesLike
+    ): Result;
+    decodeFunctionResult(
+        functionFragment: "userToReferralIds",
         data: BytesLike
     ): Result;
     decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
@@ -531,6 +656,10 @@ export interface RanceProtocolInterface extends utils.Interface {
         "PackagePlanDeactivated(bytes32)": EventFragment;
         "PaymentTokenAdded(string,address)": EventFragment;
         "PaymentTokenRemoved(address)": EventFragment;
+        "RanceAddressSet(address)": EventFragment;
+        "ReferralRewardUpdated(uint256)": EventFragment;
+        "Referred(address,address,uint256,uint256)": EventFragment;
+        "RewardClaimed(address,bytes32,uint256)": EventFragment;
         "TreasuryAddressSet(address)": EventFragment;
         "Upgraded(address)": EventFragment;
     };
@@ -548,6 +677,10 @@ export interface RanceProtocolInterface extends utils.Interface {
     getEvent(nameOrSignatureOrTopic: "PackagePlanDeactivated"): EventFragment;
     getEvent(nameOrSignatureOrTopic: "PaymentTokenAdded"): EventFragment;
     getEvent(nameOrSignatureOrTopic: "PaymentTokenRemoved"): EventFragment;
+    getEvent(nameOrSignatureOrTopic: "RanceAddressSet"): EventFragment;
+    getEvent(nameOrSignatureOrTopic: "ReferralRewardUpdated"): EventFragment;
+    getEvent(nameOrSignatureOrTopic: "Referred"): EventFragment;
+    getEvent(nameOrSignatureOrTopic: "RewardClaimed"): EventFragment;
     getEvent(nameOrSignatureOrTopic: "TreasuryAddressSet"): EventFragment;
     getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
 }
@@ -652,7 +785,7 @@ export type OwnershipTransferredEventFilter =
 
 export interface PackagePlanAddedEventObject {
     _id: string;
-    _unsureFee: BigNumber;
+    _uninsureFee: BigNumber;
     _insuranceFee: number;
     _periodInSeconds: number;
 }
@@ -697,6 +830,52 @@ export type PaymentTokenRemovedEvent = TypedEvent<
 
 export type PaymentTokenRemovedEventFilter =
     TypedEventFilter<PaymentTokenRemovedEvent>;
+
+export interface RanceAddressSetEventObject {
+    _address: string;
+}
+export type RanceAddressSetEvent = TypedEvent<
+    [string],
+    RanceAddressSetEventObject
+>;
+
+export type RanceAddressSetEventFilter = TypedEventFilter<RanceAddressSetEvent>;
+
+export interface ReferralRewardUpdatedEventObject {
+    newPercentage: BigNumber;
+}
+export type ReferralRewardUpdatedEvent = TypedEvent<
+    [BigNumber],
+    ReferralRewardUpdatedEventObject
+>;
+
+export type ReferralRewardUpdatedEventFilter =
+    TypedEventFilter<ReferralRewardUpdatedEvent>;
+
+export interface ReferredEventObject {
+    referrer: string;
+    user: string;
+    amount: BigNumber;
+    timestamp: BigNumber;
+}
+export type ReferredEvent = TypedEvent<
+    [string, string, BigNumber, BigNumber],
+    ReferredEventObject
+>;
+
+export type ReferredEventFilter = TypedEventFilter<ReferredEvent>;
+
+export interface RewardClaimedEventObject {
+    user: string;
+    referralId: string;
+    amount: BigNumber;
+}
+export type RewardClaimedEvent = TypedEvent<
+    [string, string, BigNumber],
+    RewardClaimedEventObject
+>;
+
+export type RewardClaimedEventFilter = TypedEventFilter<RewardClaimedEvent>;
 
 export interface TreasuryAddressSetEventObject {
     _address: string;
@@ -754,7 +933,7 @@ export interface RanceProtocol extends BaseContract {
         addPackagePlan(
             _periodInSeconds: PromiseOrValue<BigNumberish>,
             _insuranceFee: PromiseOrValue<BigNumberish>,
-            _unsureFee: PromiseOrValue<BigNumberish>,
+            _uninsureFee: PromiseOrValue<BigNumberish>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<ContractTransaction>;
 
@@ -766,6 +945,11 @@ export interface RanceProtocol extends BaseContract {
 
         cancel(
             _packageId: PromiseOrValue<BytesLike>,
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<ContractTransaction>;
+
+        claimReferralReward(
+            _referralIds: PromiseOrValue<BytesLike>[],
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<ContractTransaction>;
 
@@ -786,6 +970,13 @@ export interface RanceProtocol extends BaseContract {
             length: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
         ): Promise<[RanceProtocol.PackageStructOutput[]]>;
+
+        getAllUserReferrals(
+            _user: PromiseOrValue<string>,
+            cursor: PromiseOrValue<BigNumberish>,
+            length: PromiseOrValue<BigNumberish>,
+            overrides?: CallOverrides
+        ): Promise<[RanceProtocol.ReferralRewardStructOutput[]]>;
 
         getInsureAmount(
             _planId: PromiseOrValue<BytesLike>,
@@ -821,10 +1012,14 @@ export interface RanceProtocol extends BaseContract {
             overrides?: CallOverrides
         ): Promise<[BigNumber]>;
 
+        getUserReferralsLength(
+            _user: PromiseOrValue<string>,
+            overrides?: CallOverrides
+        ): Promise<[BigNumber]>;
+
         initialize(
             _treasuryAddress: PromiseOrValue<string>,
             _uniswapRouter: PromiseOrValue<string>,
-            _rance: PromiseOrValue<string>,
             _paymentToken: PromiseOrValue<string>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<ContractTransaction>;
@@ -852,6 +1047,16 @@ export interface RanceProtocol extends BaseContract {
             arg0: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
         ): Promise<[string]>;
+
+        insureWithReferrer(
+            _planId: PromiseOrValue<BytesLike>,
+            _amount: PromiseOrValue<BigNumberish>,
+            path: PromiseOrValue<string>[],
+            _insureCoin: PromiseOrValue<string>,
+            _paymentToken: PromiseOrValue<string>,
+            _referrer: PromiseOrValue<string>,
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<ContractTransaction>;
 
         isPackageActive(
             insurancePackage: RanceProtocol.PackageStruct,
@@ -919,12 +1124,29 @@ export interface RanceProtocol extends BaseContract {
                 planId: string;
                 periodInSeconds: number;
                 insuranceFee: number;
-                unsureFee: BigNumber;
+                uninsureFee: BigNumber;
                 isActivated: boolean;
             }
         >;
 
         proxiableUUID(overrides?: CallOverrides): Promise<[string]>;
+
+        referralPercentage(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+        referrals(
+            arg0: PromiseOrValue<BytesLike>,
+            overrides?: CallOverrides
+        ): Promise<
+            [string, BigNumber, BigNumber, string, string, string, boolean] & {
+                id: string;
+                rewardAmount: BigNumber;
+                timestamp: BigNumber;
+                token: string;
+                referrer: string;
+                user: string;
+                claimed: boolean;
+            }
+        >;
 
         removeInsureCoins(
             _tokenNames: PromiseOrValue<string>[],
@@ -937,6 +1159,11 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<ContractTransaction>;
 
         renounceOwnership(
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<ContractTransaction>;
+
+        setRance(
+            _token: PromiseOrValue<string>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<ContractTransaction>;
 
@@ -959,6 +1186,11 @@ export interface RanceProtocol extends BaseContract {
 
         uniswapRouter(overrides?: CallOverrides): Promise<[string]>;
 
+        updateReferralReward(
+            _percentage: PromiseOrValue<BigNumberish>,
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<ContractTransaction>;
+
         upgradeTo(
             newImplementation: PromiseOrValue<string>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -971,6 +1203,12 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<ContractTransaction>;
 
         userToPackageIds(
+            arg0: PromiseOrValue<string>,
+            arg1: PromiseOrValue<BigNumberish>,
+            overrides?: CallOverrides
+        ): Promise<[string]>;
+
+        userToReferralIds(
             arg0: PromiseOrValue<string>,
             arg1: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
@@ -993,7 +1231,7 @@ export interface RanceProtocol extends BaseContract {
     addPackagePlan(
         _periodInSeconds: PromiseOrValue<BigNumberish>,
         _insuranceFee: PromiseOrValue<BigNumberish>,
-        _unsureFee: PromiseOrValue<BigNumberish>,
+        _uninsureFee: PromiseOrValue<BigNumberish>,
         overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -1005,6 +1243,11 @@ export interface RanceProtocol extends BaseContract {
 
     cancel(
         _packageId: PromiseOrValue<BytesLike>,
+        overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    claimReferralReward(
+        _referralIds: PromiseOrValue<BytesLike>[],
         overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -1025,6 +1268,13 @@ export interface RanceProtocol extends BaseContract {
         length: PromiseOrValue<BigNumberish>,
         overrides?: CallOverrides
     ): Promise<RanceProtocol.PackageStructOutput[]>;
+
+    getAllUserReferrals(
+        _user: PromiseOrValue<string>,
+        cursor: PromiseOrValue<BigNumberish>,
+        length: PromiseOrValue<BigNumberish>,
+        overrides?: CallOverrides
+    ): Promise<RanceProtocol.ReferralRewardStructOutput[]>;
 
     getInsureAmount(
         _planId: PromiseOrValue<BytesLike>,
@@ -1060,10 +1310,14 @@ export interface RanceProtocol extends BaseContract {
         overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getUserReferralsLength(
+        _user: PromiseOrValue<string>,
+        overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     initialize(
         _treasuryAddress: PromiseOrValue<string>,
         _uniswapRouter: PromiseOrValue<string>,
-        _rance: PromiseOrValue<string>,
         _paymentToken: PromiseOrValue<string>,
         overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -1091,6 +1345,16 @@ export interface RanceProtocol extends BaseContract {
         arg0: PromiseOrValue<BigNumberish>,
         overrides?: CallOverrides
     ): Promise<string>;
+
+    insureWithReferrer(
+        _planId: PromiseOrValue<BytesLike>,
+        _amount: PromiseOrValue<BigNumberish>,
+        path: PromiseOrValue<string>[],
+        _insureCoin: PromiseOrValue<string>,
+        _paymentToken: PromiseOrValue<string>,
+        _referrer: PromiseOrValue<string>,
+        overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     isPackageActive(
         insurancePackage: RanceProtocol.PackageStruct,
@@ -1158,12 +1422,29 @@ export interface RanceProtocol extends BaseContract {
             planId: string;
             periodInSeconds: number;
             insuranceFee: number;
-            unsureFee: BigNumber;
+            uninsureFee: BigNumber;
             isActivated: boolean;
         }
     >;
 
     proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
+    referralPercentage(overrides?: CallOverrides): Promise<BigNumber>;
+
+    referrals(
+        arg0: PromiseOrValue<BytesLike>,
+        overrides?: CallOverrides
+    ): Promise<
+        [string, BigNumber, BigNumber, string, string, string, boolean] & {
+            id: string;
+            rewardAmount: BigNumber;
+            timestamp: BigNumber;
+            token: string;
+            referrer: string;
+            user: string;
+            claimed: boolean;
+        }
+    >;
 
     removeInsureCoins(
         _tokenNames: PromiseOrValue<string>[],
@@ -1176,6 +1457,11 @@ export interface RanceProtocol extends BaseContract {
     ): Promise<ContractTransaction>;
 
     renounceOwnership(
+        overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setRance(
+        _token: PromiseOrValue<string>,
         overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -1198,6 +1484,11 @@ export interface RanceProtocol extends BaseContract {
 
     uniswapRouter(overrides?: CallOverrides): Promise<string>;
 
+    updateReferralReward(
+        _percentage: PromiseOrValue<BigNumberish>,
+        overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     upgradeTo(
         newImplementation: PromiseOrValue<string>,
         overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1210,6 +1501,12 @@ export interface RanceProtocol extends BaseContract {
     ): Promise<ContractTransaction>;
 
     userToPackageIds(
+        arg0: PromiseOrValue<string>,
+        arg1: PromiseOrValue<BigNumberish>,
+        overrides?: CallOverrides
+    ): Promise<string>;
+
+    userToReferralIds(
         arg0: PromiseOrValue<string>,
         arg1: PromiseOrValue<BigNumberish>,
         overrides?: CallOverrides
@@ -1232,7 +1529,7 @@ export interface RanceProtocol extends BaseContract {
         addPackagePlan(
             _periodInSeconds: PromiseOrValue<BigNumberish>,
             _insuranceFee: PromiseOrValue<BigNumberish>,
-            _unsureFee: PromiseOrValue<BigNumberish>,
+            _uninsureFee: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
         ): Promise<string>;
 
@@ -1244,6 +1541,11 @@ export interface RanceProtocol extends BaseContract {
 
         cancel(
             _packageId: PromiseOrValue<BytesLike>,
+            overrides?: CallOverrides
+        ): Promise<void>;
+
+        claimReferralReward(
+            _referralIds: PromiseOrValue<BytesLike>[],
             overrides?: CallOverrides
         ): Promise<void>;
 
@@ -1264,6 +1566,13 @@ export interface RanceProtocol extends BaseContract {
             length: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
         ): Promise<RanceProtocol.PackageStructOutput[]>;
+
+        getAllUserReferrals(
+            _user: PromiseOrValue<string>,
+            cursor: PromiseOrValue<BigNumberish>,
+            length: PromiseOrValue<BigNumberish>,
+            overrides?: CallOverrides
+        ): Promise<RanceProtocol.ReferralRewardStructOutput[]>;
 
         getInsureAmount(
             _planId: PromiseOrValue<BytesLike>,
@@ -1299,10 +1608,14 @@ export interface RanceProtocol extends BaseContract {
             overrides?: CallOverrides
         ): Promise<BigNumber>;
 
+        getUserReferralsLength(
+            _user: PromiseOrValue<string>,
+            overrides?: CallOverrides
+        ): Promise<BigNumber>;
+
         initialize(
             _treasuryAddress: PromiseOrValue<string>,
             _uniswapRouter: PromiseOrValue<string>,
-            _rance: PromiseOrValue<string>,
             _paymentToken: PromiseOrValue<string>,
             overrides?: CallOverrides
         ): Promise<void>;
@@ -1330,6 +1643,16 @@ export interface RanceProtocol extends BaseContract {
             arg0: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
         ): Promise<string>;
+
+        insureWithReferrer(
+            _planId: PromiseOrValue<BytesLike>,
+            _amount: PromiseOrValue<BigNumberish>,
+            path: PromiseOrValue<string>[],
+            _insureCoin: PromiseOrValue<string>,
+            _paymentToken: PromiseOrValue<string>,
+            _referrer: PromiseOrValue<string>,
+            overrides?: CallOverrides
+        ): Promise<void>;
 
         isPackageActive(
             insurancePackage: RanceProtocol.PackageStruct,
@@ -1397,12 +1720,29 @@ export interface RanceProtocol extends BaseContract {
                 planId: string;
                 periodInSeconds: number;
                 insuranceFee: number;
-                unsureFee: BigNumber;
+                uninsureFee: BigNumber;
                 isActivated: boolean;
             }
         >;
 
         proxiableUUID(overrides?: CallOverrides): Promise<string>;
+
+        referralPercentage(overrides?: CallOverrides): Promise<BigNumber>;
+
+        referrals(
+            arg0: PromiseOrValue<BytesLike>,
+            overrides?: CallOverrides
+        ): Promise<
+            [string, BigNumber, BigNumber, string, string, string, boolean] & {
+                id: string;
+                rewardAmount: BigNumber;
+                timestamp: BigNumber;
+                token: string;
+                referrer: string;
+                user: string;
+                claimed: boolean;
+            }
+        >;
 
         removeInsureCoins(
             _tokenNames: PromiseOrValue<string>[],
@@ -1415,6 +1755,11 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<void>;
 
         renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+        setRance(
+            _token: PromiseOrValue<string>,
+            overrides?: CallOverrides
+        ): Promise<void>;
 
         setTreasuryAddress(
             _treasuryAddress: PromiseOrValue<string>,
@@ -1435,6 +1780,11 @@ export interface RanceProtocol extends BaseContract {
 
         uniswapRouter(overrides?: CallOverrides): Promise<string>;
 
+        updateReferralReward(
+            _percentage: PromiseOrValue<BigNumberish>,
+            overrides?: CallOverrides
+        ): Promise<void>;
+
         upgradeTo(
             newImplementation: PromiseOrValue<string>,
             overrides?: CallOverrides
@@ -1447,6 +1797,12 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<void>;
 
         userToPackageIds(
+            arg0: PromiseOrValue<string>,
+            arg1: PromiseOrValue<BigNumberish>,
+            overrides?: CallOverrides
+        ): Promise<string>;
+
+        userToReferralIds(
             arg0: PromiseOrValue<string>,
             arg1: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
@@ -1532,13 +1888,13 @@ export interface RanceProtocol extends BaseContract {
 
         "PackagePlanAdded(bytes32,uint256,uint8,uint32)"(
             _id?: PromiseOrValue<BytesLike> | null,
-            _unsureFee?: PromiseOrValue<BigNumberish> | null,
+            _uninsureFee?: PromiseOrValue<BigNumberish> | null,
             _insuranceFee?: PromiseOrValue<BigNumberish> | null,
             _periodInSeconds?: null
         ): PackagePlanAddedEventFilter;
         PackagePlanAdded(
             _id?: PromiseOrValue<BytesLike> | null,
-            _unsureFee?: PromiseOrValue<BigNumberish> | null,
+            _uninsureFee?: PromiseOrValue<BigNumberish> | null,
             _insuranceFee?: PromiseOrValue<BigNumberish> | null,
             _periodInSeconds?: null
         ): PackagePlanAddedEventFilter;
@@ -1565,6 +1921,44 @@ export interface RanceProtocol extends BaseContract {
         PaymentTokenRemoved(
             paymentToken?: PromiseOrValue<string> | null
         ): PaymentTokenRemovedEventFilter;
+
+        "RanceAddressSet(address)"(
+            _address?: PromiseOrValue<string> | null
+        ): RanceAddressSetEventFilter;
+        RanceAddressSet(
+            _address?: PromiseOrValue<string> | null
+        ): RanceAddressSetEventFilter;
+
+        "ReferralRewardUpdated(uint256)"(
+            newPercentage?: null
+        ): ReferralRewardUpdatedEventFilter;
+        ReferralRewardUpdated(
+            newPercentage?: null
+        ): ReferralRewardUpdatedEventFilter;
+
+        "Referred(address,address,uint256,uint256)"(
+            referrer?: PromiseOrValue<string> | null,
+            user?: PromiseOrValue<string> | null,
+            amount?: null,
+            timestamp?: null
+        ): ReferredEventFilter;
+        Referred(
+            referrer?: PromiseOrValue<string> | null,
+            user?: PromiseOrValue<string> | null,
+            amount?: null,
+            timestamp?: null
+        ): ReferredEventFilter;
+
+        "RewardClaimed(address,bytes32,uint256)"(
+            user?: PromiseOrValue<string> | null,
+            referralId?: PromiseOrValue<BytesLike> | null,
+            amount?: null
+        ): RewardClaimedEventFilter;
+        RewardClaimed(
+            user?: PromiseOrValue<string> | null,
+            referralId?: PromiseOrValue<BytesLike> | null,
+            amount?: null
+        ): RewardClaimedEventFilter;
 
         "TreasuryAddressSet(address)"(
             _address?: PromiseOrValue<string> | null
@@ -1593,7 +1987,7 @@ export interface RanceProtocol extends BaseContract {
         addPackagePlan(
             _periodInSeconds: PromiseOrValue<BigNumberish>,
             _insuranceFee: PromiseOrValue<BigNumberish>,
-            _unsureFee: PromiseOrValue<BigNumberish>,
+            _uninsureFee: PromiseOrValue<BigNumberish>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<BigNumber>;
 
@@ -1605,6 +1999,11 @@ export interface RanceProtocol extends BaseContract {
 
         cancel(
             _packageId: PromiseOrValue<BytesLike>,
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<BigNumber>;
+
+        claimReferralReward(
+            _referralIds: PromiseOrValue<BytesLike>[],
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<BigNumber>;
 
@@ -1620,6 +2019,13 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<BigNumber>;
 
         getAllUserPackages(
+            _user: PromiseOrValue<string>,
+            cursor: PromiseOrValue<BigNumberish>,
+            length: PromiseOrValue<BigNumberish>,
+            overrides?: CallOverrides
+        ): Promise<BigNumber>;
+
+        getAllUserReferrals(
             _user: PromiseOrValue<string>,
             cursor: PromiseOrValue<BigNumberish>,
             length: PromiseOrValue<BigNumberish>,
@@ -1660,10 +2066,14 @@ export interface RanceProtocol extends BaseContract {
             overrides?: CallOverrides
         ): Promise<BigNumber>;
 
+        getUserReferralsLength(
+            _user: PromiseOrValue<string>,
+            overrides?: CallOverrides
+        ): Promise<BigNumber>;
+
         initialize(
             _treasuryAddress: PromiseOrValue<string>,
             _uniswapRouter: PromiseOrValue<string>,
-            _rance: PromiseOrValue<string>,
             _paymentToken: PromiseOrValue<string>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<BigNumber>;
@@ -1690,6 +2100,16 @@ export interface RanceProtocol extends BaseContract {
         insureCoins(
             arg0: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
+        ): Promise<BigNumber>;
+
+        insureWithReferrer(
+            _planId: PromiseOrValue<BytesLike>,
+            _amount: PromiseOrValue<BigNumberish>,
+            path: PromiseOrValue<string>[],
+            _insureCoin: PromiseOrValue<string>,
+            _paymentToken: PromiseOrValue<string>,
+            _referrer: PromiseOrValue<string>,
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<BigNumber>;
 
         isPackageActive(
@@ -1731,6 +2151,13 @@ export interface RanceProtocol extends BaseContract {
 
         proxiableUUID(overrides?: CallOverrides): Promise<BigNumber>;
 
+        referralPercentage(overrides?: CallOverrides): Promise<BigNumber>;
+
+        referrals(
+            arg0: PromiseOrValue<BytesLike>,
+            overrides?: CallOverrides
+        ): Promise<BigNumber>;
+
         removeInsureCoins(
             _tokenNames: PromiseOrValue<string>[],
             overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1742,6 +2169,11 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<BigNumber>;
 
         renounceOwnership(
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<BigNumber>;
+
+        setRance(
+            _token: PromiseOrValue<string>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<BigNumber>;
 
@@ -1764,6 +2196,11 @@ export interface RanceProtocol extends BaseContract {
 
         uniswapRouter(overrides?: CallOverrides): Promise<BigNumber>;
 
+        updateReferralReward(
+            _percentage: PromiseOrValue<BigNumberish>,
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<BigNumber>;
+
         upgradeTo(
             newImplementation: PromiseOrValue<string>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1776,6 +2213,12 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<BigNumber>;
 
         userToPackageIds(
+            arg0: PromiseOrValue<string>,
+            arg1: PromiseOrValue<BigNumberish>,
+            overrides?: CallOverrides
+        ): Promise<BigNumber>;
+
+        userToReferralIds(
             arg0: PromiseOrValue<string>,
             arg1: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
@@ -1799,7 +2242,7 @@ export interface RanceProtocol extends BaseContract {
         addPackagePlan(
             _periodInSeconds: PromiseOrValue<BigNumberish>,
             _insuranceFee: PromiseOrValue<BigNumberish>,
-            _unsureFee: PromiseOrValue<BigNumberish>,
+            _uninsureFee: PromiseOrValue<BigNumberish>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<PopulatedTransaction>;
 
@@ -1811,6 +2254,11 @@ export interface RanceProtocol extends BaseContract {
 
         cancel(
             _packageId: PromiseOrValue<BytesLike>,
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<PopulatedTransaction>;
+
+        claimReferralReward(
+            _referralIds: PromiseOrValue<BytesLike>[],
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<PopulatedTransaction>;
 
@@ -1826,6 +2274,13 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<PopulatedTransaction>;
 
         getAllUserPackages(
+            _user: PromiseOrValue<string>,
+            cursor: PromiseOrValue<BigNumberish>,
+            length: PromiseOrValue<BigNumberish>,
+            overrides?: CallOverrides
+        ): Promise<PopulatedTransaction>;
+
+        getAllUserReferrals(
             _user: PromiseOrValue<string>,
             cursor: PromiseOrValue<BigNumberish>,
             length: PromiseOrValue<BigNumberish>,
@@ -1872,10 +2327,14 @@ export interface RanceProtocol extends BaseContract {
             overrides?: CallOverrides
         ): Promise<PopulatedTransaction>;
 
+        getUserReferralsLength(
+            _user: PromiseOrValue<string>,
+            overrides?: CallOverrides
+        ): Promise<PopulatedTransaction>;
+
         initialize(
             _treasuryAddress: PromiseOrValue<string>,
             _uniswapRouter: PromiseOrValue<string>,
-            _rance: PromiseOrValue<string>,
             _paymentToken: PromiseOrValue<string>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<PopulatedTransaction>;
@@ -1902,6 +2361,16 @@ export interface RanceProtocol extends BaseContract {
         insureCoins(
             arg0: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides
+        ): Promise<PopulatedTransaction>;
+
+        insureWithReferrer(
+            _planId: PromiseOrValue<BytesLike>,
+            _amount: PromiseOrValue<BigNumberish>,
+            path: PromiseOrValue<string>[],
+            _insureCoin: PromiseOrValue<string>,
+            _paymentToken: PromiseOrValue<string>,
+            _referrer: PromiseOrValue<string>,
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<PopulatedTransaction>;
 
         isPackageActive(
@@ -1943,6 +2412,15 @@ export interface RanceProtocol extends BaseContract {
 
         proxiableUUID(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+        referralPercentage(
+            overrides?: CallOverrides
+        ): Promise<PopulatedTransaction>;
+
+        referrals(
+            arg0: PromiseOrValue<BytesLike>,
+            overrides?: CallOverrides
+        ): Promise<PopulatedTransaction>;
+
         removeInsureCoins(
             _tokenNames: PromiseOrValue<string>[],
             overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1954,6 +2432,11 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<PopulatedTransaction>;
 
         renounceOwnership(
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<PopulatedTransaction>;
+
+        setRance(
+            _token: PromiseOrValue<string>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
         ): Promise<PopulatedTransaction>;
 
@@ -1976,6 +2459,11 @@ export interface RanceProtocol extends BaseContract {
 
         uniswapRouter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+        updateReferralReward(
+            _percentage: PromiseOrValue<BigNumberish>,
+            overrides?: Overrides & { from?: PromiseOrValue<string> }
+        ): Promise<PopulatedTransaction>;
+
         upgradeTo(
             newImplementation: PromiseOrValue<string>,
             overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1988,6 +2476,12 @@ export interface RanceProtocol extends BaseContract {
         ): Promise<PopulatedTransaction>;
 
         userToPackageIds(
+            arg0: PromiseOrValue<string>,
+            arg1: PromiseOrValue<BigNumberish>,
+            overrides?: CallOverrides
+        ): Promise<PopulatedTransaction>;
+
+        userToReferralIds(
             arg0: PromiseOrValue<string>,
             arg1: PromiseOrValue<BigNumberish>,
             overrides?: CallOverrides

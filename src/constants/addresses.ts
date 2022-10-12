@@ -33,15 +33,15 @@ export const tokens = {
     },
 };
 
-export const stakingAddressToPool: {[key: string]: number} = {
+export const stakingAddressToPool: { [key: string]: number } = {
     "0xB1ad1e8612C228e4A6C9cDed64d8A270157c9455": 0, //staging
     "0x1D17EE3b2eD935305b77D72Ab883D3827bC2E605": 1, //staging
 };
 
 export const masterRanceWallet = {
     staging: "0x91A8BEF2bEBD46fBD079667DcE72865C1f015df0",
-    mainnet: "0x91A8BEF2bEBD46fBD079667DcE72865C1f015df0" // replaced with mainnet wallet later
-}
+    mainnet: "0x91A8BEF2bEBD46fBD079667DcE72865C1f015df0", // replaced with mainnet wallet later
+};
 
 export const AUTOSHARK_ADDRESSES = "0xB0EeB0632bAB15F120735e5838908378936bd484";
 
@@ -54,3 +54,5 @@ export const tokenAddressToName = Object.fromEntries(
         tokens[process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as keyof typeof tokens]
     ).map((entries: string[]) => [entries[1], entries[0]])
 );
+
+export const multicall2Address = "0x5e954f5972EC6BFc7dECd75779F10d848230345F";

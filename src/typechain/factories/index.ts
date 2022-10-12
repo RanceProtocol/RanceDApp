@@ -7,3 +7,4 @@ export { MMFRouter__factory } from "./MMFRouter__factory";
 export { RanceProtocol__factory } from "./RanceProtocol__factory";
 export { Staking1__factory } from "./Staking1__factory";
 export { Staking2__factory } from "./Staking2__factory";
+export { Multicall2__factory } from "./Multicall2__factory";
