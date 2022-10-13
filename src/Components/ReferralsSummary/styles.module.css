@@ -1,0 +1,48 @@
+.root {
+    @apply flex
+    flex-col
+    items-center
+    gap-3
+    p-6
+    bg-theme-secondary-alpha-4
+    w-64
+    max-w-full
+    rounded-xl
+    mx-auto
+    self-start
+    order-3
+    md:order-4
+    mb-8;
+}
+.available__balance__text {
+    @apply text-xs
+    text-theme-white-alpha;
+}
+.reward__balances {
+    @apply text-center;
+}
+
+.balance {
+    @apply font-black;
+}
+.referrals__count {
+    @apply text-theme-secondary-1
+    text-sm;
+}
+
+.withdraw__btn {
+    @apply border-theme-secondary-1
+    bg-theme-secondary-2
+    hover:bg-theme-secondary-1
+    text-theme-white
+    text-xs
+    py-2
+    px-3
+    rounded-full;
+}
+
+.withdraw__btn:disabled {
+    @apply bg-theme-secondary-alpha-2
+    text-theme-white-alpha
+    cursor-not-allowed;
+}

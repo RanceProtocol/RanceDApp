@@ -1,0 +1,40 @@
+.root {
+    @apply bg-theme-secondary-alpha
+       rounded-lg
+       flex
+       justify-between
+       relative
+       overflow-hidden
+       mb-8
+       md:mb-0
+       md:col-span-2;
+}
+
+.banner__container {
+    @apply pl-4
+       py-4
+       max-w-[75%];
+}
+
+.banner__header {
+    @apply text-base
+    sm:text-xl
+    font-bold
+    py-2;
+}
+
+.banner__text {
+    @apply text-xs
+    lg:text-sm
+    text-theme-gray-2;
+}
+
+.banner__image__container {
+    @apply w-36
+    h-20
+    absolute
+    -right-14
+    sm:right-0
+    bottom-0
+    rounded-tr-xl;
+}

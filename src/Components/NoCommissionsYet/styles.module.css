@@ -1,0 +1,26 @@
+.root {
+    @apply flex
+    flex-col
+    items-center
+    gap-3
+    p-4
+    my-8
+    md:col-span-2
+    order-4
+    md:order-3;
+}
+
+.wallet__image__container {
+    @apply w-24
+    h-20
+    relative;
+}
+
+.wallet__image {
+}
+
+.no__commissions__text {
+    @apply text-center
+    text-theme-white-alpha
+    text-xs;
+}
